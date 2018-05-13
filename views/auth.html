@@ -1,0 +1,38 @@
+<html>
+  <header>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      
+      <title>Log in</title>
+  </header>
+  <body>
+    <div class="container h-100">
+      <div class="row h-100 align-items-center justify-content-center">
+        <div class="col-lg-4">
+          <div class="card w-100">
+            <div class="card-body">
+              <form method="post" action="/login">
+                <div clas="form-group">
+                  <label for="email">
+                    Email
+                  </label>
+                  <input type="email" class="form-control" id="email" name="email">
+                </div>
+                <div class="form-group">
+                  <label for="password">
+                    Contraseña
+                  </label>
+                  <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
