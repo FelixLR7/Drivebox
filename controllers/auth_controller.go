@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"net/http"
-	"strings"
+	/* "strings" */
 	"html/template"
 	"path/filepath"
-	"fmt"
+	/* "fmt" */
 )
 
 var layoutsAbsPath, _ = filepath.Abs("./src/drivebox/views")
@@ -31,11 +31,4 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	}
 	
 	http.Redirect(response, request, redirectTarget, 302)
-}
-
-func CssHanlder(response http.ResponseWriter, request *http.Request) {
-  path := strings.Split(request.URL.Path, "/")
-	if len(path) == 0 {
-		fmt.Println("a")
-	}
 }
