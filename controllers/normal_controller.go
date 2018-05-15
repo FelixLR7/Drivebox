@@ -42,3 +42,11 @@ func Unauthorized401(response http.ResponseWriter, request *http.Request) {
 	tmpl := template.Must(template.ParseFiles(staticFilesPath + "/401.html"))
 	tmpl.Execute(response, nil)
 }
+
+func CssHandler(response http.ResponseWriter, request *http.Request) {
+	/* path := strings.Split(r.URL.Path, "/")
+
+	if len(path) == 2 {
+		
+	} */
+}

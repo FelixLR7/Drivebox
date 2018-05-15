@@ -15,7 +15,7 @@ func init(){
 }
 
 func main() {
-  router := routers.InitRoutes()
-
+	router := routers.InitRoutes()
+	
 	http.ListenAndServe(":8080", router)
 }
