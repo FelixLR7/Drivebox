@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"drivebox/services"
 	"log"
-	"fmt"
+	/* "fmt" */
 	/* "database/sql" */
 )
 
@@ -19,10 +19,10 @@ func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
 }
 
-var layoutsAbsPath, _ = filepath.Abs("./src/drivebox/views")
+var layoutsPath, _ = filepath.Abs("./src/drivebox/views")
 
 func IndexHandler(response http.ResponseWriter, request *http.Request) {
-	tmpl := template.Must(template.ParseFiles(layoutsAbsPath + "/index.html"))
+	tmpl := template.Must(template.ParseFiles(layoutsPath + "/index.html"))
 	email, _ := services.GetCookie("email", request)
 	user := Prueba{User: email}
 	tmpl.Execute(response, user)
@@ -50,7 +50,7 @@ func CheckAuth(f http.HandlerFunc) http.HandlerFunc {
 		if errEmail == nil && errPassword == nil {
 			f(response, request)
 		} else {
-			fmt.Println("NO ESTÁS AUTORIZADO")
+			http.Redirect(response, request, "/401", http.StatusFound)
 		}
 	}
 }
