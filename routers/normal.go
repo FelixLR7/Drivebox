@@ -7,7 +7,7 @@ import (
 
 func SetNormalRoutes(router *mux.Router) *mux.Router {
 	router.HandleFunc("/", controllers.AuthHandler)
-	router.PathPrefix("/static").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+  router.HandleFunc("/css/{file}", controllers.CssHandler)
   
   return router
 }
