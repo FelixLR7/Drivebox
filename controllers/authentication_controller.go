@@ -1,12 +1,11 @@
 package controllers
 
 import (
-	"drivebox/services"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
-	/* "fmt" */ /* "database/sql" */)
+	/* "database/sql" */)
 
 type Prueba struct {
 	User string
@@ -21,9 +20,7 @@ var layoutsPath, _ = filepath.Abs("./src/drivebox/views")
 
 func IndexHandler(response http.ResponseWriter, request *http.Request) {
 	tmpl := template.Must(template.ParseFiles(layoutsPath + "/index.html"))
-	email, _ := services.GetCookie("email", request)
-	user := Prueba{User: email}
-	tmpl.Execute(response, user)
+	tmpl.Execute(response, nil)
 }
 
 func LoginHandler(response http.ResponseWriter, request *http.Request) {
@@ -34,7 +31,7 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	if email != "" && pass != "" {
 		cookie := &http.Cookie{
 			Name:  "session",
-			Value: "",
+			Value: "login",
 			Path:  "/",
 		}
 		http.SetCookie(response, cookie)
@@ -58,7 +55,7 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 
 func CheckAuth(f http.HandlerFunc) http.HandlerFunc {
 	return func(response http.ResponseWriter, request *http.Request) {
-		if _, err := request.Cookie("session"); err == nil {
+		if cookie, err := request.Cookie("session"); cookie.Value == "login" && err == nil {
 			f(response, request)
 		} else {
 			ErrorHandler(response, request, http.StatusUnauthorized)
