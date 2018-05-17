@@ -1,14 +1,12 @@
 package controllers
 
 import (
-	"net/http"
-	"html/template"
-	"path/filepath"
 	"drivebox/services"
+	"html/template"
 	"log"
-	/* "fmt" */
-	/* "database/sql" */
-)
+	"net/http"
+	"path/filepath"
+	/* "fmt" */ /* "database/sql" */)
 
 type Prueba struct {
 	User string
@@ -32,13 +30,13 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	email := request.FormValue("email")
 	pass := request.FormValue("password")
 	redirectTarget := "/"
-	
+
 	if email != "" && pass != "" {
 		services.NewCookie("email", email, response)
 		services.NewCookie("password", pass, response)
 		redirectTarget = "/index"
 	}
-	
+
 	http.Redirect(response, request, redirectTarget, 302)
 }
 
@@ -54,4 +52,3 @@ func CheckAuth(f http.HandlerFunc) http.HandlerFunc {
 		}
 	}
 }
-

@@ -1,21 +1,20 @@
 package main
 
 import (
+	"drivebox/routers"
 	"net/http"
 	/* "fmt" */
 	"log"
-  /* "github.com/gorilla/mux" */
-  "drivebox/routers"
-)
+	/* "github.com/gorilla/mux" */ /* "drivebox/routers" */)
 
-func init(){
+func init() {
 	log.SetPrefix("LOG: ")
 	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
 	log.Println("Server started")
 }
 
 func main() {
-	router := routers.InitRoutes()
-	
-	http.ListenAndServe(":8080", router)
+	routers.InitRoutes()
+
+	http.ListenAndServe(":8080", nil)
 }
