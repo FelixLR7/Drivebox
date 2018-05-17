@@ -32,23 +32,36 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	redirectTarget := "/"
 
 	if email != "" && pass != "" {
-		services.NewCookie("email", email, response)
-		services.NewCookie("password", pass, response)
+		cookie := &http.Cookie{
+			Name:  "session",
+			Value: "",
+			Path:  "/",
+		}
+		http.SetCookie(response, cookie)
 		redirectTarget = "/index"
 	}
 
 	http.Redirect(response, request, redirectTarget, 302)
 }
 
+func Logout(response http.ResponseWriter, request *http.Request) {
+	cookie := &http.Cookie{
+		Name:   "session",
+		Value:  "",
+		Path:   "/",
+		MaxAge: -1,
+	}
+	http.SetCookie(response, cookie)
+
+	http.Redirect(response, request, "/", http.StatusFound)
+}
+
 func CheckAuth(f http.HandlerFunc) http.HandlerFunc {
 	return func(response http.ResponseWriter, request *http.Request) {
-		_, errEmail := services.GetCookie("email", request)
-		_, errPassword := services.GetCookie("password", request)
-
-		if errEmail == nil && errPassword == nil {
+		if _, err := request.Cookie("session"); err == nil {
 			f(response, request)
 		} else {
-			http.Redirect(response, request, "/401", http.StatusFound)
+			ErrorHandler(response, request, http.StatusUnauthorized)
 		}
 	}
 }
