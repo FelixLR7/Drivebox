@@ -5,11 +5,21 @@ import (
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
 	Email string `json:"email"`
 	Pass  string `json:"pass"`
+}
+
+func HashPassword(password string) (string, error) { //cifra el pass
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+func CheckPasswordHash(password, hash string) bool { //devuelve true si el hash es igual a la pass
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 func listarUsuarios() {
@@ -18,7 +28,7 @@ func listarUsuarios() {
 		panic(err.Error())
 	}
 	defer db.Close()
-	// listar usuarios
+
 	results, err := db.Query("SELECT email, pass FROM users")
 	if err != nil {
 		panic(err.Error())
@@ -31,8 +41,8 @@ func listarUsuarios() {
 		if err != nil {
 			panic(err.Error())
 		}
-		fmt.Println(user.Email)
-		fmt.Println(user.Pass)
+
+		fmt.Println(user.Email + ": " + user.Pass)
 	}
 }
 func insertarUsuario(email string, pass string) {
@@ -41,7 +51,8 @@ func insertarUsuario(email string, pass string) {
 		panic(err.Error())
 	}
 
-	insert, err := db.Query("INSERT INTO users VALUES('" + email + "','" + pass + "');")
+	hash, _ := HashPassword(pass)
+	insert, err := db.Query("INSERT INTO users VALUES('" + email + "','" + hash + "');")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -53,4 +64,5 @@ func insertarUsuario(email string, pass string) {
 func main() {
 	//insertarUsuario("a@a.a", "a")
 	listarUsuarios()
+
 }
