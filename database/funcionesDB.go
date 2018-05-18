@@ -12,12 +12,16 @@ type User struct {
 	Email string `json:"email"`
 	Pass  string `json:"pass"`
 }
+type Archivo struct {
+	Nombre string `json:"nombre"`
+	Url    string `json:"url"`
+}
 
-func HashPassword(password string) (string, error) { //cifra el pass
+func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
 }
-func CheckPasswordHash(password, hash string) bool { //devuelve true si el hash es igual a la pass
+func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
@@ -45,7 +49,7 @@ func listarUsuarios() {
 		fmt.Println(user.Email + ": " + user.Pass)
 	}
 }
-func insertarUsuario(email string, pass string) {
+func insertarUsuario(email, pass string) {
 	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
 	if err != nil {
 		panic(err.Error())
@@ -60,9 +64,47 @@ func insertarUsuario(email string, pass string) {
 
 	fmt.Println("Usuario insertado correctamente")
 }
+func listarArchivos(emailUser string) {
+	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	results, err := db.Query("SELECT nombre, url FROM archivo WHERE emailuser='" + emailUser + "';")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for results.Next() {
+		var archivo Archivo
+
+		err = results.Scan(&archivo.Nombre, &archivo.Url)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		fmt.Println("NOMBRE: " + archivo.Nombre + " - URL: " + archivo.Url)
+	}
+}
+func insertarArchivo(emailUser, nombre, url string) {
+	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	insert, err := db.Query("INSERT INTO archivo VALUES('" + nombre + "','" + url + "','" + emailUser + "');")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer insert.Close()
+
+	fmt.Println("Archivo insertado correctamente")
+}
 
 func main() {
 	//insertarUsuario("a@a.a", "a")
-	listarUsuarios()
-
+	//listarUsuarios()
+	//insertarArchivo("c", "c.txt", "database/c.txt")
+	listarArchivos("a@a.a")
 }
