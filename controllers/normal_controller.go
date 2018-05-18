@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// Prueba2 ...
 type Prueba2 struct {
 	User string
 }
@@ -18,6 +19,7 @@ func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
 }
 
+// IndexHandler ...
 func IndexHandler(response http.ResponseWriter, request *http.Request) {
 	if request.URL.Path != "/" {
 		ErrorHandler(response, request, http.StatusNotFound)
@@ -30,6 +32,7 @@ func IndexHandler(response http.ResponseWriter, request *http.Request) {
 	}
 }
 
+// ErrorHandler ...
 func ErrorHandler(response http.ResponseWriter, request *http.Request, status int) {
 	http.ServeFile(response, request, "/home/felix/go/src/drivebox/static/errors/"+strconv.Itoa(status)+".html")
 }
