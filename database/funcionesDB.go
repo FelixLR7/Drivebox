@@ -101,10 +101,26 @@ func insertarArchivo(emailUser, nombre, url string) {
 
 	fmt.Println("Archivo insertado correctamente")
 }
+func eliminarArchivo(emailUser, nombre string) {
+	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	insert, err := db.Query("DELETE FROM archivo WHERE emailuser='" + emailUser + "' and nombre='" + nombre + "';")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer insert.Close()
+
+	fmt.Println("Archivo borrado correctamente")
+}
 
 func main() {
 	//insertarUsuario("a@a.a", "a")
 	//listarUsuarios()
-	//insertarArchivo("c", "c.txt", "database/c.txt")
+	eliminarArchivo("a@a.a", "w.txt")
+
 	listarArchivos("a@a.a")
+
 }
