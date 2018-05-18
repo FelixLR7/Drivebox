@@ -1,11 +1,10 @@
 package controllers
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
-	/* "database/sql" */)
+)
 
 type Prueba struct {
 	User string
@@ -17,11 +16,6 @@ func init() {
 }
 
 var layoutsPath, _ = filepath.Abs("./src/drivebox/views")
-
-func IndexHandler(response http.ResponseWriter, request *http.Request) {
-	tmpl := template.Must(template.ParseFiles(layoutsPath + "/index.html"))
-	tmpl.Execute(response, nil)
-}
 
 func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	email := request.FormValue("email")
@@ -53,12 +47,24 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 	http.Redirect(response, request, "/", http.StatusFound)
 }
 
-func CheckAuth(f http.HandlerFunc) http.HandlerFunc {
+func Authentication(f http.HandlerFunc) http.HandlerFunc {
 	return func(response http.ResponseWriter, request *http.Request) {
-		if cookie, err := request.Cookie("session"); cookie.Value == "login" && err == nil {
+		if CheckAuth(request) {
 			f(response, request)
 		} else {
 			ErrorHandler(response, request, http.StatusUnauthorized)
 		}
 	}
+}
+
+func CheckAuth(request *http.Request) bool {
+	if cookie, err := request.Cookie("session"); err == nil && cookie.Value == "login" {
+		return true
+	} else {
+		return false
+	}
+}
+
+func Homepage(response http.ResponseWriter, request *http.Request) {
+	http.ServeFile(response, request, "/home/felix/go/src/drivebox/views/index.html")
 }
