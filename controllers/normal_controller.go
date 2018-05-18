@@ -1,11 +1,10 @@
 package controllers
 
 import (
-	_ "database/sql"
-	_ "fmt"
 	"log"
 	"net/http"
 	"path/filepath"
+	"strconv"
 )
 
 type Prueba2 struct {
@@ -19,9 +18,18 @@ func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
 }
 
-func ErrorHandler(response http.ResponseWriter, request *http.Request, status int) {
-	response.WriteHeader(status)
-	if status == http.StatusNotFound {
-		http.ServeFile(response, request, "/home/felix/go/src/drivebox/static/errors/404.html")
+func IndexHandler(response http.ResponseWriter, request *http.Request) {
+	if request.URL.Path != "/" {
+		ErrorHandler(response, request, http.StatusNotFound)
+	} else {
+		if CheckAuth(request) {
+			http.Redirect(response, request, "/index", http.StatusFound)
+		} else {
+			http.ServeFile(response, request, "/home/felix/go/src/drivebox/static/auth.html")
+		}
 	}
+}
+
+func ErrorHandler(response http.ResponseWriter, request *http.Request, status int) {
+	http.ServeFile(response, request, "/home/felix/go/src/drivebox/static/errors/"+strconv.Itoa(status)+".html")
 }
