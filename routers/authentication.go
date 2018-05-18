@@ -7,5 +7,5 @@ import (
 
 func SetAuthenticationRoutes() {
 	http.HandleFunc("/login", controllers.LoginHandler)
-	http.HandleFunc("/index", controllers.CheckAuth(controllers.IndexHandler))
+	http.HandleFunc("/index", controllers.Authentication(controllers.Homepage))
 }
