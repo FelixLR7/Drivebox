@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
@@ -24,6 +25,14 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+func createDirIfNotExist(dir string) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err = os.MkdirAll(dir, 0755)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func listarUsuarios() {
@@ -61,6 +70,7 @@ func insertarUsuario(email, pass string) {
 		panic(err.Error())
 	}
 	defer insert.Close()
+	createDirIfNotExist(email)
 
 	fmt.Println("Usuario insertado correctamente")
 }
@@ -117,10 +127,7 @@ func eliminarArchivo(emailUser, nombre string) {
 }
 
 func main() {
-	//insertarUsuario("a@a.a", "a")
-	//listarUsuarios()
-	eliminarArchivo("a@a.a", "w.txt")
-
-	listarArchivos("a@a.a")
+	insertarUsuario("b@b.b", "hola")
+	listarUsuarios()
 
 }
