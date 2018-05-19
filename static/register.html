@@ -1,0 +1,167 @@
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      
+      <title>Log in</title>
+      <style>
+        #pass-tips {
+          display: none;
+          margin-top: 10px;
+        }
+        
+        #pass-help {
+          display: none;
+          color: red;
+        }
+
+        ul {
+          padding: 0 15px;
+        }
+
+        li {
+          margin: 5px 0;
+          font-style: italic;
+          font-size: 12px;
+        }
+
+        .invalid {
+          color: red;
+        }
+
+        .valid {
+          color: green;
+        }
+      </style>
+  </head>
+  <body>
+    <div class="container h-100">
+      <div class="row h-100 align-items-center justify-content-center">
+        <div class="col-lg-4">
+          <div class="card w-100">
+            <div class="card-body">
+              <form method="post" action="/register">
+                <div clas="form-group">
+                  <label for="email">
+                    Email
+                  </label>
+                  <input type="email" class="form-control" id="email" name="email">
+                </div>
+                <div class="form-group">
+                  <label for="password">
+                    Contraseña
+                  </label>
+                  <input type="password" class="form-control" id="password" name="password">
+                  <div id="pass-tips" class="form-group">
+                    <h6>La contraseña debe contener:</h6>
+                    <ul>
+                      <li id="letter" class="invalid">Una letra minúsucla</li>
+                      <li id="capital" class="invalid">Una letra mayúscula</li>
+                      <li id="number" class="invalid">Un número</li>
+                      <li id="length" class="invalid">Mínimo de diez caracteres</b></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="password-repeat">
+                    Repite la contraseña
+                  </label>
+                  <input type="password" class="form-control" id="password-repeat" name="password-repeat">
+                  <small id="pass-help" class="form-text text-muted">Las contraseñas deben coincidir</small>
+                </div>
+                <button type="submit" class="btn btn-primary" id="register" disabled>Registrarse</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var pass = document.getElementById("password");
+      var pass2 = document.getElementById("password-repeat")
+      var letter = document.getElementById("letter");
+      var capital = document.getElementById("capital");
+      var number = document.getElementById("number");
+      var length = document.getElementById("length");
+      var passOK = false;
+
+      pass.onfocus = function() {
+        document.getElementById("pass-tips").style.display = "block";
+      }
+
+      pass.onblur = function() {
+        if(pass.value == "")
+          document.getElementById("pass-tips").style.display = "none";
+      }
+
+      pass.onkeyup = function() {
+        // Validate lowercase letters
+        var lowerCaseLetters = /[a-z]/g;
+        if(pass.value.match(lowerCaseLetters)) {  
+          letter.classList.remove("invalid");
+          letter.classList.add("valid");
+          passOK = true;
+        } else {
+          letter.classList.remove("valid");
+          letter.classList.add("invalid");
+          passOK = false;
+        }
+        
+        // Validate capital letters
+        var upperCaseLetters = /[A-Z]/g;
+        if(pass.value.match(upperCaseLetters)) {  
+          capital.classList.remove("invalid");
+          capital.classList.add("valid");
+          passOK = true;
+        } else {
+          capital.classList.remove("valid");
+          capital.classList.add("invalid");
+          passOK = false;
+        }
+
+        // Validate numbers
+        var numbers = /[0-9]/g;
+        if(pass.value.match(numbers)) {  
+          number.classList.remove("invalid");
+          number.classList.add("valid");
+          passOK = true;
+        } else {
+          number.classList.remove("valid");
+          number.classList.add("invalid");
+          passOK = false;
+        }
+        
+        // Validate length
+        if(pass.value.length >= 10) {
+          length.classList.remove("invalid");
+          length.classList.add("valid");
+          passOK = true;
+        } else {
+          length.classList.remove("valid");
+          length.classList.add("invalid");
+          passOK = false;
+        }
+
+        if(pass.value == pass2.value && passOK) {
+          document.getElementById("register").disabled = false;
+        }
+        else {
+          document.getElementById("register").disabled = true;          
+        }
+      }
+
+      pass2.onkeyup = function() {
+        if(pass.value == pass2.value && passOK) {
+          document.getElementById("register").disabled = false;
+        }
+        else {
+          document.getElementById("register").disabled = true;          
+        }
+      }
+    </script>
+  </body>
+</html>
