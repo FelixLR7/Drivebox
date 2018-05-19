@@ -1,0 +1,41 @@
+<html>
+  <header>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link href="/static/css/index.css" rel="stylesheet">
+      <title>Inicio</title>
+  </header>
+  <body>
+      <div class="container-fluid">
+          <div class="row">
+            <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#">Inicio {{.User}} <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Subir archivo</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Logs</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Mi cuenta</a>
+                </li>
+              </ul>
+            </nav>
+    
+            <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+                <form method="post" action="/upload-file">
+                  <input type="file">
+                  <input type="submit">
+                </form>
+                
+            </main>
+          </div>
+        </div>
+  </body>
+</html>

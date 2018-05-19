@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 )
 
+// Prueba ...
 type Prueba struct {
 	User string
 }
@@ -17,6 +18,7 @@ func init() {
 
 var layoutsPath, _ = filepath.Abs("./src/drivebox/views")
 
+// LoginHandler ...
 func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	email := request.FormValue("email")
 	pass := request.FormValue("password")
@@ -35,7 +37,8 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	http.Redirect(response, request, redirectTarget, 302)
 }
 
-func Logout(response http.ResponseWriter, request *http.Request) {
+// LogoutHandler ...
+func LogoutHandler(response http.ResponseWriter, request *http.Request) {
 	cookie := &http.Cookie{
 		Name:   "session",
 		Value:  "",
@@ -47,6 +50,7 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 	http.Redirect(response, request, "/", http.StatusFound)
 }
 
+// Authentication ...
 func Authentication(f http.HandlerFunc) http.HandlerFunc {
 	return func(response http.ResponseWriter, request *http.Request) {
 		if CheckAuth(request) {
@@ -57,14 +61,16 @@ func Authentication(f http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// CheckAuth ...
 func CheckAuth(request *http.Request) bool {
 	if cookie, err := request.Cookie("session"); err == nil && cookie.Value == "login" {
 		return true
-	} else {
-		return false
 	}
+
+	return false
 }
 
+// Homepage ...
 func Homepage(response http.ResponseWriter, request *http.Request) {
 	http.ServeFile(response, request, "/home/felix/go/src/drivebox/views/index.html")
 }
