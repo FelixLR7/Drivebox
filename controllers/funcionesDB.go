@@ -4,28 +4,36 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
-
+	// a
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
 )
 
+// User ...
 type User struct {
 	Email string `json:"email"`
 	Pass  string `json:"pass"`
 }
+
+// Archivo ...
 type Archivo struct {
 	Nombre string `json:"nombre"`
 	Url    string `json:"url"`
 }
 
+// HashPassword ...
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
 }
+
+// CheckPasswordHash ...
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
+
+// createDirIfNotExist ...
 func createDirIfNotExist(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		err = os.MkdirAll(dir, 0755)
@@ -58,7 +66,9 @@ func listarUsuarios() {
 		fmt.Println(user.Email + ": " + user.Pass)
 	}
 }
-func insertarUsuario(email, pass string) {
+
+// InsertarUsuario ...
+func InsertarUsuario(email, pass string) {
 	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
 	if err != nil {
 		panic(err.Error())
@@ -74,7 +84,9 @@ func insertarUsuario(email, pass string) {
 
 	fmt.Println("Usuario insertado correctamente")
 }
-func listarArchivos(emailUser string) {
+
+// ListarArchivos ...
+func ListarArchivos(emailUser string) {
 	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
 	if err != nil {
 		panic(err.Error())
@@ -97,7 +109,9 @@ func listarArchivos(emailUser string) {
 		fmt.Println("NOMBRE: " + archivo.Nombre + " - URL: " + archivo.Url)
 	}
 }
-func insertarArchivo(emailUser, nombre, url string) {
+
+// InsertarArchivo ...
+func InsertarArchivo(emailUser, nombre, url string) {
 	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
 	if err != nil {
 		panic(err.Error())
@@ -111,7 +125,9 @@ func insertarArchivo(emailUser, nombre, url string) {
 
 	fmt.Println("Archivo insertado correctamente")
 }
-func eliminarArchivo(emailUser, nombre string) {
+
+// EliminarArchivo ...
+func EliminarArchivo(emailUser, nombre string) {
 	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
 	if err != nil {
 		panic(err.Error())
