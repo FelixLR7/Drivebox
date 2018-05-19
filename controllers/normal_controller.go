@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -13,8 +12,8 @@ type Prueba2 struct {
 	User string
 }
 
-var projectPath, _ = filepath.Abs("./")
-var staticFilesPath, _ = filepath.Abs("./src/drivebox/static")
+var projectPath, _ = filepath.Abs("./src/drivebox")
+var staticFilesPath = projectPath + "/static"
 
 func init() {
 	log.SetPrefix("LOG NORMAL CONTROLLER: ")
@@ -29,7 +28,6 @@ func IndexHandler(response http.ResponseWriter, request *http.Request) {
 		if CheckAuth(request) {
 			http.Redirect(response, request, "/index", http.StatusFound)
 		} else {
-			fmt.Println(projectPath)
 			http.ServeFile(response, request, staticFilesPath+"/auth.html")
 		}
 	}
@@ -47,6 +45,5 @@ func RegisterPageHandler(response http.ResponseWriter, request *http.Request) {
 
 // RegisterHandler ...
 func RegisterHandler(response http.ResponseWriter, request *http.Request) {
-	fmt.Println("registra")
 	http.Redirect(response, request, "/", http.StatusFound)
 }
