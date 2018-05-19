@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"fmt"
+	"io"
 	"log"
 	"net/http"
-	"path/filepath"
+	"os"
 )
 
 // Prueba ...
@@ -15,8 +17,6 @@ func init() {
 	log.SetPrefix("LOG AUTHENTICATION CONTROLLER: ")
 	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
 }
-
-var layoutsPath, _ = filepath.Abs("./src/drivebox/views")
 
 // LoginHandler ...
 func LoginHandler(response http.ResponseWriter, request *http.Request) {
@@ -72,5 +72,36 @@ func CheckAuth(request *http.Request) bool {
 
 // Homepage ...
 func Homepage(response http.ResponseWriter, request *http.Request) {
-	http.ServeFile(response, request, "/home/felix/go/src/drivebox/views/index.html")
+	http.ServeFile(response, request, projectPath+"/views/index.html")
+}
+
+// UploadPageHandler ...
+func UploadPageHandler(response http.ResponseWriter, request *http.Request) {
+	http.ServeFile(response, request, projectPath+"/views/upload.html")
+}
+
+// UploadHandler ...
+func UploadHandler(response http.ResponseWriter, request *http.Request) {
+	file, header, err := request.FormFile("file")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
+	// Destination
+	dst, err := os.Create(projectPath + "/files/" + header.Filename)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer dst.Close()
+
+	// Copy
+	if _, err = io.Copy(dst, file); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	http.Redirect(response, request, "/", http.StatusFound)
 }
