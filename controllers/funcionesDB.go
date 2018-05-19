@@ -1,4 +1,4 @@
-package main
+package controllers
 
 import (
 	"database/sql"
@@ -124,10 +124,4 @@ func eliminarArchivo(emailUser, nombre string) {
 	defer insert.Close()
 
 	fmt.Println("Archivo borrado correctamente")
-}
-
-func main() {
-	insertarUsuario("b@b.b", "hola")
-	listarUsuarios()
-
 }
