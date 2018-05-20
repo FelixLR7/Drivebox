@@ -9,6 +9,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const (
+	DB_HOST = "tcp(127.0.0.1:3306)"
+	DB_NAME = "testdb"
+	DB_USER = "root"
+	DB_PASS = "admin"
+)
+
 // User ...
 type User struct {
 	Email string `json:"email"`
@@ -44,7 +51,7 @@ func createDirIfNotExist(dir string) {
 }
 
 func listarUsuarios() {
-	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
+	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -69,7 +76,7 @@ func listarUsuarios() {
 
 // InsertarUsuario ...
 func InsertarUsuario(email, pass string) {
-	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
+	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -87,7 +94,7 @@ func InsertarUsuario(email, pass string) {
 
 // ListarArchivos ...
 func ListarArchivos(emailUser string) {
-	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
+	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -112,7 +119,7 @@ func ListarArchivos(emailUser string) {
 
 // InsertarArchivo ...
 func InsertarArchivo(emailUser, nombre, url string) {
-	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
+	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -128,7 +135,7 @@ func InsertarArchivo(emailUser, nombre, url string) {
 
 // EliminarArchivo ...
 func EliminarArchivo(emailUser, nombre string) {
-	db, err := sql.Open("mysql", "root:admin@tcp(127.0.0.1:3306)/testdb")
+	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
 	if err != nil {
 		panic(err.Error())
 	}
