@@ -50,13 +50,16 @@ func createDirIfNotExist(dir string) {
 	}
 }
 
-func listarUsuarios() {
+func dbConn() (db *sql.DB) {
 	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
 	if err != nil {
 		panic(err.Error())
 	}
-	defer db.Close()
+	return db
+}
 
+func ListarUsuarios() {
+	db := dbConn()
 	results, err := db.Query("SELECT email, pass FROM users")
 	if err != nil {
 		panic(err.Error())
@@ -72,14 +75,12 @@ func listarUsuarios() {
 
 		fmt.Println(user.Email + ": " + user.Pass)
 	}
+	defer db.Close()
 }
 
 // InsertarUsuario ...
 func InsertarUsuario(email, pass string) {
-	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
-	if err != nil {
-		panic(err.Error())
-	}
+	db := dbConn()
 
 	hash, _ := HashPassword(pass)
 	insert, err := db.Query("INSERT INTO users VALUES('" + email + "','" + hash + "');")
@@ -94,11 +95,7 @@ func InsertarUsuario(email, pass string) {
 
 // ListarArchivos ...
 func ListarArchivos(emailUser string) {
-	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
+	db := dbConn()
 
 	results, err := db.Query("SELECT nombre, url FROM archivo WHERE emailuser='" + emailUser + "';")
 	if err != nil {
@@ -115,14 +112,12 @@ func ListarArchivos(emailUser string) {
 
 		fmt.Println("NOMBRE: " + archivo.Nombre + " - URL: " + archivo.Url)
 	}
+	defer db.Close()
 }
 
 // InsertarArchivo ...
 func InsertarArchivo(emailUser, nombre, url string) {
-	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
-	if err != nil {
-		panic(err.Error())
-	}
+	db := dbConn()
 
 	insert, err := db.Query("INSERT INTO archivo VALUES('" + nombre + "','" + url + "','" + emailUser + "');")
 	if err != nil {
@@ -135,10 +130,7 @@ func InsertarArchivo(emailUser, nombre, url string) {
 
 // EliminarArchivo ...
 func EliminarArchivo(emailUser, nombre string) {
-	db, err := sql.Open("mysql", DB_USER+":"+DB_PASS+"@"+DB_HOST+"/"+DB_NAME)
-	if err != nil {
-		panic(err.Error())
-	}
+	db := dbConn()
 
 	insert, err := db.Query("DELETE FROM archivo WHERE emailuser='" + emailUser + "' and nombre='" + nombre + "';")
 	if err != nil {

@@ -2,9 +2,8 @@ package main
 
 import (
 	"drivebox/routers"
-	"net/http"
-	/* "fmt" */
 	"log"
+	"net/http"
 	/* "github.com/gorilla/mux" */ /* "drivebox/routers" */)
 
 func init() {
@@ -17,4 +16,7 @@ func main() {
 	routers.InitRoutes()
 
 	http.ListenAndServe(":8080", nil)
+
+	//PRUEBAS BASE DE DATOS
+	//controllers.ListarUsuarios()
 }
