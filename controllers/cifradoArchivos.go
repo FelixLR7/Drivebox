@@ -55,3 +55,19 @@ func readFromFile(file string) ([]byte, error) {
 	data, err := ioutil.ReadFile(file)
 	return data, err
 }
+func cifrarArchivo(file, key string) {
+	content, err := readFromFile(file)
+	if err != nil {
+		panic(err)
+	}
+	encrypted := encrypt(string(content), key)
+	writeToFile(encrypted, file+".enc")
+}
+func descifrarArchivo(file, key string) {
+	content, err := readFromFile(file)
+	if err != nil {
+		panic(err)
+	}
+	decrypted := decrypt(string(content), key)
+	writeToFile(decrypted, file[:len(file)-4])
+}
