@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 )
 
+// Decrypt
 func decrypt(cipherstring string, keystring string) string {
 	ciphertext := []byte(cipherstring)
 	key := []byte(keystring)
@@ -28,6 +29,8 @@ func decrypt(cipherstring string, keystring string) string {
 
 	return string(ciphertext)
 }
+
+// Encrypt
 func encrypt(plainstring, keystring string) string {
 	plaintext := []byte(plainstring)
 	key := []byte(keystring)
@@ -48,14 +51,20 @@ func encrypt(plainstring, keystring string) string {
 
 	return string(ciphertext)
 }
+
+// WriteToFile
 func writeToFile(data, file string) {
 	ioutil.WriteFile(file, []byte(data), 777)
 }
+
+// ReadFromFile
 func readFromFile(file string) ([]byte, error) {
 	data, err := ioutil.ReadFile(file)
 	return data, err
 }
-func cifrarArchivo(file, key string) {
+
+// Cifrar archivo ...
+func CifrarArchivo(file, key string) {
 	content, err := readFromFile(file)
 	if err != nil {
 		panic(err)
@@ -63,7 +72,9 @@ func cifrarArchivo(file, key string) {
 	encrypted := encrypt(string(content), key)
 	writeToFile(encrypted, file+".enc")
 }
-func descifrarArchivo(file, key string) {
+
+// Descifrar archivo ...
+func DescifrarArchivo(file, key string) {
 	content, err := readFromFile(file)
 	if err != nil {
 		panic(err)
