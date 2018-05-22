@@ -31,5 +31,7 @@ func main() {
 	<-stopChan // espera señal SIGINT
 
 	/////////////////////////// PRUEBAS //////////////////////////////////
-
+	//controllers.InsertarArchivo("d.txt", "a@a.a")
+	//a := controllers.ListarArchivos("a@a.a")
+	//fmt.Println("a: " + a[0])
 }

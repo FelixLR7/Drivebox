@@ -6,7 +6,20 @@ import (
 	"crypto/rand"
 	"io"
 	"io/ioutil"
+	"os"
 )
+
+const (
+	KEY = "testtesttesttest"
+)
+
+// delete file
+func deleteFile(path string) {
+	var err = os.Remove(path)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // Decrypt
 func decrypt(cipherstring string, keystring string) string {
@@ -64,21 +77,35 @@ func readFromFile(file string) ([]byte, error) {
 }
 
 // Cifrar archivo ...
-func CifrarArchivo(file, key string) {
+func cifrarArchivo(file, key, email string) {
 	content, err := readFromFile(file)
 	if err != nil {
 		panic(err)
 	}
 	encrypted := encrypt(string(content), key)
-	writeToFile(encrypted, file+".enc")
+	writeToFile(encrypted, "files/"+email+"/"+file+".enc")
 }
 
 // Descifrar archivo ...
-func DescifrarArchivo(file, key string) {
-	content, err := readFromFile(file)
+func descifrarArchivo(file, key, email string) {
+	content, err := readFromFile("files/" + email + "/" + file + ".enc")
 	if err != nil {
 		panic(err)
 	}
 	decrypted := decrypt(string(content), key)
-	writeToFile(decrypted, file[:len(file)-4])
+	writeToFile(decrypted, "files/"+email+"/"+file)
+}
+
+// GuardarArchivo  ...
+func GuardarArchivo(file, email string) {
+	cifrarArchivo(file, KEY, email)
+}
+
+// DescargarArchivo ...
+func DescargarArchivo(file, email string) {
+	descifrarArchivo(file, KEY, email)
+
+	//hacer que descargue el archivo !!!!!
+
+	deleteFile("files/" + email + "/" + file)
 }
