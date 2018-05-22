@@ -17,5 +17,5 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 
 	/////////////////////////// PRUEBAS //////////////////////////////////
-
+	//controllers.GetArchivo("prueba.txt", "a@a.a")
 }

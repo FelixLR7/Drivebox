@@ -8,6 +8,10 @@ import (
 	"io/ioutil"
 )
 
+const (
+	KEY = "testtesttesttest"
+)
+
 // Decrypt
 func decrypt(cipherstring string, keystring string) string {
 	ciphertext := []byte(cipherstring)
@@ -64,21 +68,31 @@ func readFromFile(file string) ([]byte, error) {
 }
 
 // Cifrar archivo ...
-func CifrarArchivo(file, key string) {
+func cifrarArchivo(file, key, email string) {
 	content, err := readFromFile(file)
 	if err != nil {
 		panic(err)
 	}
 	encrypted := encrypt(string(content), key)
-	writeToFile(encrypted, file+".enc")
+	writeToFile(encrypted, "files/"+email+"/"+file+".enc")
 }
 
 // Descifrar archivo ...
-func DescifrarArchivo(file, key string) {
-	content, err := readFromFile(file)
+func descifrarArchivo(file, key, email string) {
+	content, err := readFromFile("files/" + email + "/" + file + ".enc")
 	if err != nil {
 		panic(err)
 	}
 	decrypted := decrypt(string(content), key)
-	writeToFile(decrypted, file[:len(file)-4])
+	writeToFile(decrypted, file[:len(file)-4]) //falta vero donde devuelve el archivo !!!!!!
+}
+
+// GuardarArchivo  ...
+func GuardarArchivo(file, email string) {
+	cifrarArchivo(file, KEY, email)
+}
+
+// DevolverArchivo ...
+func GetArchivo(file, email string) {
+	descifrarArchivo(file, KEY, email)
 }
