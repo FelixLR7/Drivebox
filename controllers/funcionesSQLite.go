@@ -14,12 +14,6 @@ const (
 	DB_HOST = "database/BBDD.db"
 )
 
-func checkErr(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 // createDirIfNotExist ...
 func createDirIfNotExist(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
@@ -80,7 +74,7 @@ func ListarUsuarios() {
 }
 
 // Insertar Archivos ...
-func InsertarArchivo(nombre, email string) {
+func insertarArchivo(nombre, email string) {
 	url := "files/" + email + "/" + nombre
 
 	db, _ := sql.Open(DB_NAME, DB_HOST)
@@ -92,7 +86,7 @@ func InsertarArchivo(nombre, email string) {
 }
 
 // Eliminar Archivo ...
-func EliminarArchivo(archivo, email string) {
+func eliminarArchivo(archivo, email string) {
 	db, _ := sql.Open(DB_NAME, DB_HOST)
 	stmt, err := db.Prepare("DELETE FROM archivos WHERE nombre = ? and emailuser = ?")
 	checkErr(err)

@@ -1,9 +1,8 @@
 package main
 
 import (
-	"drivebox/routers"
+	"drivebox/controllers"
 	"log"
-	"net/http"
 	/* "github.com/gorilla/mux" */ /* "drivebox/routers" */)
 
 func init() {
@@ -13,11 +12,10 @@ func init() {
 }
 
 func main() {
-	routers.InitRoutes()
-	http.ListenAndServe(":8080", nil)
+	//routers.InitRoutes()
+	//http.ListenAndServe(":8080", nil)
 
 	/////////////////////////// PRUEBAS //////////////////////////////////
-	//controllers.InsertarArchivo("d.txt", "a@a.a")
+	controllers.EliminarArchivo("g.txt", "a@a.a")
 	//a := controllers.ListarArchivos("a@a.a")
-	//fmt.Println("a: " + a[0])
 }
