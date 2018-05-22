@@ -14,9 +14,8 @@ func init() {
 
 func main() {
 	routers.InitRoutes()
-
 	http.ListenAndServe(":8080", nil)
 
-	//PRUEBAS BASE DE DATOS
-	//controllers.ListarUsuarios()
+	/////////////////////////// PRUEBAS //////////////////////////////////
+
 }
