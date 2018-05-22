@@ -102,15 +102,20 @@ func EliminarArchivo(archivo, email string) {
 }
 
 // Listar Archivos ...
-func ListarArchivos(useremail string) {
-	database, _ := sql.Open(DB_NAME, DB_HOST)
-
-	rows, _ := database.Query("SELECT * FROM archivos WHERE emailuser = '" + useremail + "';")
+func ListarArchivos(useremail string) []string {
+	var archivos []string
 	var nombre string
 	var url string
 	var email string
+
+	database, _ := sql.Open(DB_NAME, DB_HOST)
+	rows, _ := database.Query("SELECT * FROM archivos WHERE emailuser = '" + useremail + "';")
+
 	for rows.Next() {
 		rows.Scan(&nombre, &url, &email)
-		fmt.Println(nombre + " - " + url + " - " + email)
+		//fmt.Println(nombre + " - " + url + " - " + email)
+		archivos = append(archivos, nombre)
 	}
+
+	return archivos
 }

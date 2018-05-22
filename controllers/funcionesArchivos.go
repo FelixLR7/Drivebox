@@ -6,11 +6,20 @@ import (
 	"crypto/rand"
 	"io"
 	"io/ioutil"
+	"os"
 )
 
 const (
 	KEY = "testtesttesttest"
 )
+
+// delete file
+func deleteFile(path string) {
+	var err = os.Remove(path)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // Decrypt
 func decrypt(cipherstring string, keystring string) string {
@@ -84,7 +93,7 @@ func descifrarArchivo(file, key, email string) {
 		panic(err)
 	}
 	decrypted := decrypt(string(content), key)
-	writeToFile(decrypted, file[:len(file)-4]) //falta vero donde devuelve el archivo !!!!!!
+	writeToFile(decrypted, "files/"+email+"/"+file)
 }
 
 // GuardarArchivo  ...
@@ -92,7 +101,11 @@ func GuardarArchivo(file, email string) {
 	cifrarArchivo(file, KEY, email)
 }
 
-// DevolverArchivo ...
-func GetArchivo(file, email string) {
+// DescargarArchivo ...
+func DescargarArchivo(file, email string) {
 	descifrarArchivo(file, KEY, email)
+
+	//hacer que descargue el archivo !!!!!
+
+	deleteFile("files/" + email + "/" + file)
 }
