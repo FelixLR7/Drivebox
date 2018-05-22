@@ -12,7 +12,7 @@ type Prueba2 struct {
 	User string
 }
 
-var projectPath, _ = filepath.Abs("./src/drivebox")
+var projectPath, _ = filepath.Abs("./")
 var staticFilesPath = projectPath + "/static"
 
 func init() {
@@ -45,5 +45,7 @@ func RegisterPageHandler(response http.ResponseWriter, request *http.Request) {
 
 // RegisterHandler ...
 func RegisterHandler(response http.ResponseWriter, request *http.Request) {
-	http.Redirect(response, request, "/", http.StatusFound)
+	InsertarUsuario(request.FormValue("email"), request.FormValue("password"))
+
+	http.Redirect(response, request, "/index", http.StatusFound)
 }
