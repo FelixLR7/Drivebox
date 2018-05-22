@@ -1,7 +1,7 @@
 package main
 
 import (
-	"drivebox/controllers"
+	"drivebox/routers"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,15 +20,10 @@ func main() {
 	signal.Notify(stopChan, os.Interrupt)
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", controllers.IndexHandler)
-
-	/* srv := &http.Server{Addr: ":8080", Handler: mux} */
+	mux = routers.InitRoutes(mux)
 
 	go func() {
-		/* if err := srv.ListenAndServeTLS("./keys/cert.pem", "./keys/key.pem"); err != nil {
-			fmt.Println(err)
-		} */
-		if err := http.ListenAndServe(":8080", mux); err != nil {
+		if err := http.ListenAndServeTLS(":8080", "./keys/cert.pem", "./keys/key.pem", mux); err != nil {
 			fmt.Println(err)
 		}
 	}()
