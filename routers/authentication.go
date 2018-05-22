@@ -5,15 +5,17 @@ import (
 	"net/http"
 )
 
-func SetAuthenticationRoutes() {
-	http.HandleFunc("/login", controllers.LoginHandler)
-	http.HandleFunc("/logout", controllers.LogoutHandler)
-	http.HandleFunc("/upload", func(response http.ResponseWriter, request *http.Request) {
+func SetAuthenticationRoutes(mux *http.ServeMux) *http.ServeMux {
+	mux.HandleFunc("/login", controllers.LoginHandler)
+	mux.HandleFunc("/logout", controllers.LogoutHandler)
+	mux.HandleFunc("/upload", func(response http.ResponseWriter, request *http.Request) {
 		if request.Method == "GET" {
 			controllers.UploadPageHandler(response, request)
 		} else {
 			controllers.UploadHandler(response, request)
 		}
 	})
-	http.HandleFunc("/index", controllers.Authentication(controllers.Homepage))
+	mux.HandleFunc("/index", controllers.Authentication(controllers.Homepage))
+
+	return mux
 }

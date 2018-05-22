@@ -4,7 +4,7 @@ import (
 	"drivebox/routers"
 	"log"
 	"net/http"
-	/* "github.com/gorilla/mux" */ /* "drivebox/routers" */)
+)
 
 func init() {
 	log.SetPrefix("LOG: ")
@@ -13,8 +13,16 @@ func init() {
 }
 
 func main() {
-	routers.InitRoutes()
-	http.ListenAndServe(":8080", nil)
+	mux := http.NewServeMux()
+	mux = routers.InitRoutes(mux)
+
+	srv := &http.Server{Addr: ":8080", Handler: mux}
+
+	go func() {
+		if err := srv.ListenAndServeTLS("keys/cert.pem", "keys/key.pem"); err != nil {
+			log.Println("Escuchando")
+		}
+	}()
 
 	/////////////////////////// PRUEBAS //////////////////////////////////
 
