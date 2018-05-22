@@ -25,12 +25,7 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	redirectTarget := "/"
 
 	if email != "" && pass != "" {
-		cookie := &http.Cookie{
-			Name:  "session",
-			Value: "login",
-			Path:  "/",
-		}
-		http.SetCookie(response, cookie)
+		SetNewCookie("session", "login", response)
 		redirectTarget = "/index"
 	}
 
@@ -39,14 +34,7 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 
 // LogoutHandler ...
 func LogoutHandler(response http.ResponseWriter, request *http.Request) {
-	cookie := &http.Cookie{
-		Name:   "session",
-		Value:  "",
-		Path:   "/",
-		MaxAge: -1,
-	}
-	http.SetCookie(response, cookie)
-
+	SetNewCookie("session", "", response)
 	http.Redirect(response, request, "/", http.StatusFound)
 }
 
@@ -66,7 +54,6 @@ func CheckAuth(request *http.Request) bool {
 	if cookie, err := request.Cookie("session"); err == nil && cookie.Value == "login" {
 		return true
 	}
-
 	return false
 }
 
@@ -104,4 +91,25 @@ func UploadHandler(response http.ResponseWriter, request *http.Request) {
 	}
 
 	http.Redirect(response, request, "/", http.StatusFound)
+}
+
+// SetNewCookie ...
+func SetNewCookie(cookieName, cookieValue string, response http.ResponseWriter) {
+	var cookie *http.Cookie
+	if cookieValue != "" {
+		cookie = &http.Cookie{
+			Name:  cookieName,
+			Value: cookieValue,
+			Path:  "/",
+		}
+	} else {
+		cookie = &http.Cookie{
+			Name:   cookieName,
+			Value:  "",
+			Path:   "/",
+			MaxAge: -1,
+		}
+	}
+
+	http.SetCookie(response, cookie)
 }
