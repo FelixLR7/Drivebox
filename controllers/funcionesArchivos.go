@@ -4,6 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -101,6 +102,12 @@ func GuardarArchivo(file, email string) {
 	insertarArchivo(file, email)
 }
 
+// EliminarArchivo ...
+func EliminarArchivo(file, email string) {
+	eliminarArchivo(file, email)
+	deleteFile("files/" + email + "/" + file + ".enc")
+}
+
 // DescargarArchivo ...
 func DescargarArchivo(file, email string) {
 	descifrarArchivo(file, KEY, email)
@@ -109,8 +116,18 @@ func DescargarArchivo(file, email string) {
 	deleteFile("files/" + email + "/" + file)
 }
 
-// EliminarArchivo ...
-func EliminarArchivo(file, email string) {
-	eliminarArchivo(file, email)
-	deleteFile("files/" + email + "/" + file + ".enc")
+// ComprobarCredenciales
+func ComprobarCredenciales(email, pass string) bool {
+	hash := datosUsuario(email)
+	if hash != "" {
+		if CheckPasswordHash(pass, hash) {
+			return true
+		} else {
+			fmt.Println("Contraseña incorrecta !!!")
+			return false
+		}
+	} else {
+		fmt.Println("El usuario no existe !!!")
+		return false
+	}
 }

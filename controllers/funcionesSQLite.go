@@ -36,6 +36,17 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
+func datosUsuario(email string) string {
+	var password string
+	database, _ := sql.Open(DB_NAME, DB_HOST)
+	rows, _ := database.Query("SELECT password FROM users WHERE email = '" + email + "';")
+
+	rows.Next()
+	rows.Scan(&password)
+
+	return password
+}
+
 // Insertar Usuario ...
 func InsertarUsuario(email, pass string) {
 	db, _ := sql.Open(DB_NAME, DB_HOST)
