@@ -54,7 +54,6 @@ func CheckAuth(request *http.Request) bool {
 	if cookie, err := request.Cookie("session"); err == nil && cookie.Value == "login" {
 		return true
 	}
-
 	return false
 }
 
@@ -96,11 +95,21 @@ func UploadHandler(response http.ResponseWriter, request *http.Request) {
 
 // SetNewCookie ...
 func SetNewCookie(cookieName, cookieValue string, response http.ResponseWriter) {
-	cookie := &http.Cookie{
-		Name:   cookieName,
-		Value:  cookieValue,
-		Path:   "/",
-		MaxAge: -1,
+	var cookie *http.Cookie
+	if cookieValue != "" {
+		cookie = &http.Cookie{
+			Name:  cookieName,
+			Value: cookieValue,
+			Path:  "/",
+		}
+	} else {
+		cookie = &http.Cookie{
+			Name:   cookieName,
+			Value:  "",
+			Path:   "/",
+			MaxAge: -1,
+		}
 	}
+
 	http.SetCookie(response, cookie)
 }
