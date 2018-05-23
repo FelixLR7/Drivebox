@@ -64,3 +64,15 @@ h1 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
+
+
+.row-title {
+  padding: 5px 0;
+  background-color: #EEE;
+  font-weight: bold;
+}
+
+.row-list {
+  padding: 5px;
+  border-bottom: 1px solid #EEE;
+}
