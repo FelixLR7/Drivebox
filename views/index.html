@@ -43,10 +43,10 @@
               {{range .}}
               <div class="row row-list">
                 <div class="col-lg-6">
-                  {{.}}
+                  {{$q := .}}{{$q}}
                 </div>
                 <div class="col-lg-6">
-                  <a href="/download/"+{{.}}>&#9889;</a>
+                  <a href="/download/{{$q}}" class="btn btn-primary btn-download">&#9889;</a>
                 </div>
               </div>
               {{end}}              

@@ -76,3 +76,8 @@ h1 {
   padding: 5px;
   border-bottom: 1px solid #EEE;
 }
+
+.btn-download {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
