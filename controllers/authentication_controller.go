@@ -117,6 +117,13 @@ func SetNewCookie(cookieName, cookieValue string, response http.ResponseWriter) 
 	http.SetCookie(response, cookie)
 }
 
+// GetCookie ...
+func GetCookie(cookieName string, request *http.Request) string {
+	cookie, _ := request.Cookie(cookieName)
+	return cookie.Value
+}
+
+// DownloadHandler ...
 func DownloadHandler(response http.ResponseWriter, request *http.Request) {
 
 }
