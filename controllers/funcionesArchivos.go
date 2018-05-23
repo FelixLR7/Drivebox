@@ -116,18 +116,18 @@ func DescargarArchivo(file, email string) {
 	deleteFile("files/" + email + "/" + file)
 }
 
-// ComprobarCredenciales
+// ComprobarCredenciales ...
 func ComprobarCredenciales(email, pass string) bool {
 	hash := datosUsuario(email)
 	if hash != "" {
 		if CheckPasswordHash(pass, hash) {
 			return true
 		} else {
-			fmt.Println("Contraseña incorrecta !!!")
-			return false
+			/* http.Redirect */
 		}
 	} else {
 		fmt.Println("El usuario no existe !!!")
-		return false
 	}
+
+	return false
 }
