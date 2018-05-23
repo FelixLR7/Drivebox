@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"html/template"
 	"io"
 	"log"
 	"net/http"
@@ -10,7 +11,7 @@ import (
 
 // Prueba ...
 type Prueba struct {
-	User string
+	data []string
 }
 
 func init() {
@@ -24,8 +25,8 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	pass := request.FormValue("password")
 	redirectTarget := "/"
 
-	if email != "" && pass != "" {
-		SetNewCookie("session", "login", response)
+	if ComprobarCredenciales(email, pass) {
+		SetNewCookie("session", email, response)
 		redirectTarget = "/index"
 	}
 
@@ -51,7 +52,7 @@ func Authentication(f http.HandlerFunc) http.HandlerFunc {
 
 // CheckAuth ...
 func CheckAuth(request *http.Request) bool {
-	if cookie, err := request.Cookie("session"); err == nil && cookie.Value == "login" {
+	if cookie, err := request.Cookie("session"); err == nil && cookie.Value != "" {
 		return true
 	}
 	return false
@@ -59,7 +60,11 @@ func CheckAuth(request *http.Request) bool {
 
 // Homepage ...
 func Homepage(response http.ResponseWriter, request *http.Request) {
-	http.ServeFile(response, request, projectPath+"/views/index.html")
+	tmpl := template.Must(template.ParseFiles(projectPath + "/views/index.html"))
+
+	email, _ := request.Cookie("session")
+	datos := ListarArchivos(email.Value)
+	tmpl.Execute(response, datos)
 }
 
 // UploadPageHandler ...
@@ -89,6 +94,9 @@ func UploadHandler(response http.ResponseWriter, request *http.Request) {
 		fmt.Println(err)
 		return
 	}
+
+	email, _ := request.Cookie("session")
+	GuardarArchivo(projectPath+"/files/"+header.Filename, email.Value)
 
 	http.Redirect(response, request, "/", http.StatusFound)
 }

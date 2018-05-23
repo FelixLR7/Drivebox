@@ -49,3 +49,7 @@ func RegisterHandler(response http.ResponseWriter, request *http.Request) {
 	SetNewCookie("session", "login", response)
 	http.Redirect(response, request, "/index", http.StatusFound)
 }
+
+func OwnErrorsHandler(response http.ResponseWriter, request *http.Request) {
+
+}
