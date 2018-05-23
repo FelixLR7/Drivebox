@@ -9,11 +9,6 @@ import (
 	"os"
 )
 
-// Prueba ...
-type Prueba struct {
-	data []string
-}
-
 func init() {
 	log.SetPrefix("LOG AUTHENTICATION CONTROLLER: ")
 	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
@@ -120,4 +115,8 @@ func SetNewCookie(cookieName, cookieValue string, response http.ResponseWriter) 
 	}
 
 	http.SetCookie(response, cookie)
+}
+
+func DownloadHandler(response http.ResponseWriter, request *http.Request) {
+
 }

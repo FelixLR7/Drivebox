@@ -15,6 +15,7 @@ func SetAuthenticationRoutes(mux *http.ServeMux) *http.ServeMux {
 			controllers.UploadHandler(response, request)
 		}
 	})
+	mux.HandleFunc("/download/{file}", controllers.DownloadHandler)
 	mux.HandleFunc("/index", controllers.Authentication(controllers.Homepage))
 
 	return mux
