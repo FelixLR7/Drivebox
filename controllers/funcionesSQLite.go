@@ -47,7 +47,7 @@ func datosUsuario(email string) string {
 	return password
 }
 
-// Insertar Usuario ...
+// InsertarUsuario ...
 func InsertarUsuario(email, pass string) {
 	db, _ := sql.Open(DB_NAME, DB_HOST)
 	stmt, err := db.Prepare("INSERT INTO users (email, password) values(?,?)")
@@ -61,7 +61,7 @@ func InsertarUsuario(email, pass string) {
 	createDirIfNotExist("files/" + email)
 }
 
-// Eliminar Usuario ...
+// EliminarUsuario ...
 func EliminarUsuario(email string) {
 	db, _ := sql.Open(DB_NAME, DB_HOST)
 	stmt, err := db.Prepare("DELETE FROM users WHERE email = ?")
@@ -71,7 +71,7 @@ func EliminarUsuario(email string) {
 	checkErr(err)
 }
 
-// Listar Usuarios ...
+// ListarUsuarios ...
 func ListarUsuarios() {
 	database, _ := sql.Open(DB_NAME, DB_HOST)
 
@@ -84,7 +84,7 @@ func ListarUsuarios() {
 	}
 }
 
-// Insertar Archivos ...
+// InsertarArchivos ...
 func insertarArchivo(nombre, email string) {
 	url := "files/" + email + "/" + nombre
 
@@ -96,7 +96,7 @@ func insertarArchivo(nombre, email string) {
 	checkErr(err)
 }
 
-// Eliminar Archivo ...
+// EliminarArchivo ...
 func eliminarArchivo(archivo, email string) {
 	db, _ := sql.Open(DB_NAME, DB_HOST)
 	stmt, err := db.Prepare("DELETE FROM archivos WHERE nombre = ? and emailuser = ?")
@@ -106,7 +106,7 @@ func eliminarArchivo(archivo, email string) {
 	checkErr(err)
 }
 
-// Listar Archivos ...
+// ListarArchivos ...
 func ListarArchivos(useremail string) []string {
 	var archivos []string
 	var nombre string
