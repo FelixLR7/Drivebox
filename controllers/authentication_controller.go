@@ -25,7 +25,7 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	pass := request.FormValue("password")
 	redirectTarget := "/"
 
-	if email != "" && pass != "" {
+	if ComprobarCredenciales(email, pass) {
 		SetNewCookie("session", email, response)
 		redirectTarget = "/index"
 	}
@@ -94,6 +94,9 @@ func UploadHandler(response http.ResponseWriter, request *http.Request) {
 		fmt.Println(err)
 		return
 	}
+
+	email, _ := request.Cookie("session")
+	GuardarArchivo(projectPath+"/files/"+header.Filename, email.Value)
 
 	http.Redirect(response, request, "/", http.StatusFound)
 }
