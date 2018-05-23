@@ -87,7 +87,7 @@ func cifrarArchivo(file, key, email string) {
 }
 
 // Descifrar archivo ...
-func descifrarArchivo(file, key, email string) {
+func DescifrarArchivo(file, key, email string) {
 	content, err := readFromFile("files/" + email + "/" + file + ".enc")
 	checkErr(err)
 
@@ -106,12 +106,4 @@ func GuardarArchivo(file, email string) {
 func EliminarArchivo(file, email string) {
 	eliminarArchivo(file, email)
 	deleteFile("files/" + email + "/" + file + ".enc")
-}
-
-// DescargarArchivo ...
-func DescargarArchivo(file, email string) {
-	descifrarArchivo(file, KEY, email)
-	//downloadFile(file, "files/"+email)
-
-	deleteFile("files/" + email + "/" + file)
 }

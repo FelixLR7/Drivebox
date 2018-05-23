@@ -1,12 +1,15 @@
 package controllers
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 func init() {
@@ -119,11 +122,25 @@ func SetNewCookie(cookieName, cookieValue string, response http.ResponseWriter) 
 
 // GetCookie ...
 func GetCookie(cookieName string, request *http.Request) string {
-	cookie, _ := request.Cookie(cookieName)
+	cookie, err := request.Cookie(cookieName)
+	if err != nil {
+		log.Println(err)
+	}
 	return cookie.Value
 }
 
 // DownloadHandler ...
 func DownloadHandler(response http.ResponseWriter, request *http.Request) {
+	email := GetCookie("session", request)
+	param := request.URL.Query().Get("name")
 
+	DescifrarArchivo(param, KEY, email)
+
+	response.Header().Set("Content-Disposition", "attachment; filename=\""+param+"\"")
+	response.Header().Set("Content-Type", request.Header.Get("Content-Type"))
+
+	data, _ := ioutil.ReadFile("./files/" + email + "/" + param)
+	http.ServeContent(response, request, param, time.Now(), bytes.NewReader(data))
+
+	deleteFile("files/" + email + "/" + param)
 }

@@ -5,3 +5,174 @@ LOG: 2018/05/23 14:23:18 /home/felix/go/src/drivebox/main.go:20: Server started
 LOG: 2018/05/23 15:24:15 /home/felix/go/src/drivebox/main.go:20: Server started
 LOG: 2018/05/23 15:24:19 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: server: error reading preface from client [::1]:32872: read tcp [::1]:8080->[::1]:32872: read: connection reset by peer
 LOG: 2018/05/23 15:25:05 /home/felix/go/src/drivebox/main.go:20: Server started
+LOG: 2018/05/23 16:25:08 /home/felix/go/src/drivebox/main.go:20: Server started
+LOG: 2018/05/23 16:25:12 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: server: error reading preface from client [::1]:33606: read tcp [::1]:8080->[::1]:33606: read: connection reset by peer
+LOG: 2018/05/23 16:27:59 /home/felix/go/src/drivebox/main.go:20: Server started
+LOG: 2018/05/23 16:28:23 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: panic serving [::1]:33650: runtime error: index out of range
+goroutine 34 [running]:
+net/http.(*http2serverConn).runHandler.func1(0xc420214000, 0xc4201c0faf, 0xc4201a01c0)
+	/usr/local/go/src/net/http/h2_bundle.go:5753 +0x190
+panic(0x804400, 0xc64f60)
+	/usr/local/go/src/runtime/panic.go:502 +0x229
+drivebox/controllers.DownloadHandler(0x8b6840, 0xc420214000, 0xc420210100)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:133 +0x1a1
+drivebox/controllers.Authentication.func1(0x8b6840, 0xc420214000, 0xc420210100)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:42 +0x68
+net/http.HandlerFunc.ServeHTTP(0xc42009eb80, 0x8b6840, 0xc420214000, 0xc420210100)
+	/usr/local/go/src/net/http/server.go:1947 +0x44
+net/http.(*ServeMux).ServeHTTP(0xc4200a5080, 0x8b6840, 0xc420214000, 0xc420210100)
+	/usr/local/go/src/net/http/server.go:2337 +0x130
+net/http.serverHandler.ServeHTTP(0xc4200a7110, 0x8b6840, 0xc420214000, 0xc420210100)
+	/usr/local/go/src/net/http/server.go:2694 +0xbc
+net/http.initNPNRequest.ServeHTTP(0xc4201d2000, 0xc4200a7110, 0x8b6840, 0xc420214000, 0xc420210100)
+	/usr/local/go/src/net/http/server.go:3260 +0x9a
+net/http.(Handler).ServeHTTP-fm(0x8b6840, 0xc420214000, 0xc420210100)
+	/usr/local/go/src/net/http/h2_bundle.go:5475 +0x4d
+net/http.(*http2serverConn).runHandler(0xc4201a01c0, 0xc420214000, 0xc420210100, 0xc420216000)
+	/usr/local/go/src/net/http/h2_bundle.go:5760 +0x89
+created by net/http.(*http2serverConn).processHeaders
+	/usr/local/go/src/net/http/h2_bundle.go:5494 +0x46b
+LOG: 2018/05/23 16:28:23 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: panic serving [::1]:33650: runtime error: index out of range
+goroutine 35 [running]:
+net/http.(*http2serverConn).runHandler.func1(0xc420214010, 0xc42005dfaf, 0xc4201a01c0)
+	/usr/local/go/src/net/http/h2_bundle.go:5753 +0x190
+panic(0x804400, 0xc64f60)
+	/usr/local/go/src/runtime/panic.go:502 +0x229
+drivebox/controllers.DownloadHandler(0x8b6840, 0xc420214010, 0xc420210300)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:133 +0x1a1
+drivebox/controllers.Authentication.func1(0x8b6840, 0xc420214010, 0xc420210300)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:42 +0x68
+net/http.HandlerFunc.ServeHTTP(0xc42009eb80, 0x8b6840, 0xc420214010, 0xc420210300)
+	/usr/local/go/src/net/http/server.go:1947 +0x44
+net/http.(*ServeMux).ServeHTTP(0xc4200a5080, 0x8b6840, 0xc420214010, 0xc420210300)
+	/usr/local/go/src/net/http/server.go:2337 +0x130
+net/http.serverHandler.ServeHTTP(0xc4200a7110, 0x8b6840, 0xc420214010, 0xc420210300)
+	/usr/local/go/src/net/http/server.go:2694 +0xbc
+net/http.initNPNRequest.ServeHTTP(0xc4201d2000, 0xc4200a7110, 0x8b6840, 0xc420214010, 0xc420210300)
+	/usr/local/go/src/net/http/server.go:3260 +0x9a
+net/http.(Handler).ServeHTTP-fm(0x8b6840, 0xc420214010, 0xc420210300)
+	/usr/local/go/src/net/http/h2_bundle.go:5475 +0x4d
+net/http.(*http2serverConn).runHandler(0xc4201a01c0, 0xc420214010, 0xc420210300, 0xc420216040)
+	/usr/local/go/src/net/http/h2_bundle.go:5760 +0x89
+created by net/http.(*http2serverConn).processHeaders
+	/usr/local/go/src/net/http/h2_bundle.go:5494 +0x46b
+LOG: 2018/05/23 16:28:28 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: panic serving [::1]:33650: runtime error: index out of range
+goroutine 36 [running]:
+net/http.(*http2serverConn).runHandler.func1(0xc420214018, 0xc4201c0faf, 0xc4201a01c0)
+	/usr/local/go/src/net/http/h2_bundle.go:5753 +0x190
+panic(0x804400, 0xc64f60)
+	/usr/local/go/src/runtime/panic.go:502 +0x229
+drivebox/controllers.DownloadHandler(0x8b6840, 0xc420214018, 0xc420210500)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:133 +0x1a1
+drivebox/controllers.Authentication.func1(0x8b6840, 0xc420214018, 0xc420210500)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:42 +0x68
+net/http.HandlerFunc.ServeHTTP(0xc42009eb80, 0x8b6840, 0xc420214018, 0xc420210500)
+	/usr/local/go/src/net/http/server.go:1947 +0x44
+net/http.(*ServeMux).ServeHTTP(0xc4200a5080, 0x8b6840, 0xc420214018, 0xc420210500)
+	/usr/local/go/src/net/http/server.go:2337 +0x130
+net/http.serverHandler.ServeHTTP(0xc4200a7110, 0x8b6840, 0xc420214018, 0xc420210500)
+	/usr/local/go/src/net/http/server.go:2694 +0xbc
+net/http.initNPNRequest.ServeHTTP(0xc4201d2000, 0xc4200a7110, 0x8b6840, 0xc420214018, 0xc420210500)
+	/usr/local/go/src/net/http/server.go:3260 +0x9a
+net/http.(Handler).ServeHTTP-fm(0x8b6840, 0xc420214018, 0xc420210500)
+	/usr/local/go/src/net/http/h2_bundle.go:5475 +0x4d
+net/http.(*http2serverConn).runHandler(0xc4201a01c0, 0xc420214018, 0xc420210500, 0xc420216060)
+	/usr/local/go/src/net/http/h2_bundle.go:5760 +0x89
+created by net/http.(*http2serverConn).processHeaders
+	/usr/local/go/src/net/http/h2_bundle.go:5494 +0x46b
+LOG: 2018/05/23 16:28:58 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: panic serving [::1]:33650: runtime error: index out of range
+goroutine 37 [running]:
+net/http.(*http2serverConn).runHandler.func1(0xc420214028, 0xc420061faf, 0xc4201a01c0)
+	/usr/local/go/src/net/http/h2_bundle.go:5753 +0x190
+panic(0x804400, 0xc64f60)
+	/usr/local/go/src/runtime/panic.go:502 +0x229
+drivebox/controllers.DownloadHandler(0x8b6840, 0xc420214028, 0xc420210800)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:133 +0x1a1
+drivebox/controllers.Authentication.func1(0x8b6840, 0xc420214028, 0xc420210800)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:42 +0x68
+net/http.HandlerFunc.ServeHTTP(0xc42009eb80, 0x8b6840, 0xc420214028, 0xc420210800)
+	/usr/local/go/src/net/http/server.go:1947 +0x44
+net/http.(*ServeMux).ServeHTTP(0xc4200a5080, 0x8b6840, 0xc420214028, 0xc420210800)
+	/usr/local/go/src/net/http/server.go:2337 +0x130
+net/http.serverHandler.ServeHTTP(0xc4200a7110, 0x8b6840, 0xc420214028, 0xc420210800)
+	/usr/local/go/src/net/http/server.go:2694 +0xbc
+net/http.initNPNRequest.ServeHTTP(0xc4201d2000, 0xc4200a7110, 0x8b6840, 0xc420214028, 0xc420210800)
+	/usr/local/go/src/net/http/server.go:3260 +0x9a
+net/http.(Handler).ServeHTTP-fm(0x8b6840, 0xc420214028, 0xc420210800)
+	/usr/local/go/src/net/http/h2_bundle.go:5475 +0x4d
+net/http.(*http2serverConn).runHandler(0xc4201a01c0, 0xc420214028, 0xc420210800, 0xc4202160a0)
+	/usr/local/go/src/net/http/h2_bundle.go:5760 +0x89
+created by net/http.(*http2serverConn).processHeaders
+	/usr/local/go/src/net/http/h2_bundle.go:5494 +0x46b
+LOG: 2018/05/23 16:29:58 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: panic serving [::1]:33650: runtime error: index out of range
+goroutine 7 [running]:
+net/http.(*http2serverConn).runHandler.func1(0xc42000e020, 0xc420061faf, 0xc4201a01c0)
+	/usr/local/go/src/net/http/h2_bundle.go:5753 +0x190
+panic(0x804400, 0xc64f60)
+	/usr/local/go/src/runtime/panic.go:502 +0x229
+drivebox/controllers.DownloadHandler(0x8b6840, 0xc42000e020, 0xc420284100)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:133 +0x1a1
+drivebox/controllers.Authentication.func1(0x8b6840, 0xc42000e020, 0xc420284100)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:42 +0x68
+net/http.HandlerFunc.ServeHTTP(0xc42009eb80, 0x8b6840, 0xc42000e020, 0xc420284100)
+	/usr/local/go/src/net/http/server.go:1947 +0x44
+net/http.(*ServeMux).ServeHTTP(0xc4200a5080, 0x8b6840, 0xc42000e020, 0xc420284100)
+	/usr/local/go/src/net/http/server.go:2337 +0x130
+net/http.serverHandler.ServeHTTP(0xc4200a7110, 0x8b6840, 0xc42000e020, 0xc420284100)
+	/usr/local/go/src/net/http/server.go:2694 +0xbc
+net/http.initNPNRequest.ServeHTTP(0xc4201d2000, 0xc4200a7110, 0x8b6840, 0xc42000e020, 0xc420284100)
+	/usr/local/go/src/net/http/server.go:3260 +0x9a
+net/http.(Handler).ServeHTTP-fm(0x8b6840, 0xc42000e020, 0xc420284100)
+	/usr/local/go/src/net/http/h2_bundle.go:5475 +0x4d
+net/http.(*http2serverConn).runHandler(0xc4201a01c0, 0xc42000e020, 0xc420284100, 0xc42000c0e0)
+	/usr/local/go/src/net/http/h2_bundle.go:5760 +0x89
+created by net/http.(*http2serverConn).processHeaders
+	/usr/local/go/src/net/http/h2_bundle.go:5494 +0x46b
+LOG: 2018/05/23 16:34:58 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: panic serving [::1]:33650: runtime error: index out of range
+goroutine 9 [running]:
+net/http.(*http2serverConn).runHandler.func1(0xc42000e030, 0xc42005dfaf, 0xc4201a01c0)
+	/usr/local/go/src/net/http/h2_bundle.go:5753 +0x190
+panic(0x804400, 0xc64f60)
+	/usr/local/go/src/runtime/panic.go:502 +0x229
+drivebox/controllers.DownloadHandler(0x8b6840, 0xc42000e030, 0xc420284300)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:133 +0x1a1
+drivebox/controllers.Authentication.func1(0x8b6840, 0xc42000e030, 0xc420284300)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:42 +0x68
+net/http.HandlerFunc.ServeHTTP(0xc42009eb80, 0x8b6840, 0xc42000e030, 0xc420284300)
+	/usr/local/go/src/net/http/server.go:1947 +0x44
+net/http.(*ServeMux).ServeHTTP(0xc4200a5080, 0x8b6840, 0xc42000e030, 0xc420284300)
+	/usr/local/go/src/net/http/server.go:2337 +0x130
+net/http.serverHandler.ServeHTTP(0xc4200a7110, 0x8b6840, 0xc42000e030, 0xc420284300)
+	/usr/local/go/src/net/http/server.go:2694 +0xbc
+net/http.initNPNRequest.ServeHTTP(0xc4201d2000, 0xc4200a7110, 0x8b6840, 0xc42000e030, 0xc420284300)
+	/usr/local/go/src/net/http/server.go:3260 +0x9a
+net/http.(Handler).ServeHTTP-fm(0x8b6840, 0xc42000e030, 0xc420284300)
+	/usr/local/go/src/net/http/h2_bundle.go:5475 +0x4d
+net/http.(*http2serverConn).runHandler(0xc4201a01c0, 0xc42000e030, 0xc420284300, 0xc42000c120)
+	/usr/local/go/src/net/http/h2_bundle.go:5760 +0x89
+created by net/http.(*http2serverConn).processHeaders
+	/usr/local/go/src/net/http/h2_bundle.go:5494 +0x46b
+LOG: 2018/05/23 16:44:58 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: panic serving [::1]:33650: runtime error: index out of range
+goroutine 32 [running]:
+net/http.(*http2serverConn).runHandler.func1(0xc4200ae088, 0xc4201c0faf, 0xc4201a01c0)
+	/usr/local/go/src/net/http/h2_bundle.go:5753 +0x190
+panic(0x804400, 0xc64f60)
+	/usr/local/go/src/runtime/panic.go:502 +0x229
+drivebox/controllers.DownloadHandler(0x8b6840, 0xc4200ae088, 0xc42019e300)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:133 +0x1a1
+drivebox/controllers.Authentication.func1(0x8b6840, 0xc4200ae088, 0xc42019e300)
+	/home/felix/go/src/drivebox/controllers/authentication_controller.go:42 +0x68
+net/http.HandlerFunc.ServeHTTP(0xc42009eb80, 0x8b6840, 0xc4200ae088, 0xc42019e300)
+	/usr/local/go/src/net/http/server.go:1947 +0x44
+net/http.(*ServeMux).ServeHTTP(0xc4200a5080, 0x8b6840, 0xc4200ae088, 0xc42019e300)
+	/usr/local/go/src/net/http/server.go:2337 +0x130
+net/http.serverHandler.ServeHTTP(0xc4200a7110, 0x8b6840, 0xc4200ae088, 0xc42019e300)
+	/usr/local/go/src/net/http/server.go:2694 +0xbc
+net/http.initNPNRequest.ServeHTTP(0xc4201d2000, 0xc4200a7110, 0x8b6840, 0xc4200ae088, 0xc42019e300)
+	/usr/local/go/src/net/http/server.go:3260 +0x9a
+net/http.(Handler).ServeHTTP-fm(0x8b6840, 0xc4200ae088, 0xc42019e300)
+	/usr/local/go/src/net/http/h2_bundle.go:5475 +0x4d
+net/http.(*http2serverConn).runHandler(0xc4201a01c0, 0xc4200ae088, 0xc42019e300, 0xc420146f60)
+	/usr/local/go/src/net/http/h2_bundle.go:5760 +0x89
+created by net/http.(*http2serverConn).processHeaders
+	/usr/local/go/src/net/http/h2_bundle.go:5494 +0x46b

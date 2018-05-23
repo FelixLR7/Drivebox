@@ -10,11 +10,11 @@ import (
 )
 
 func init() {
-	file, e := os.OpenFile("log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	/* file, e := os.OpenFile("log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if e != nil {
 		log.Println("Error al abrir el fichero.")
 	}
-	log.SetOutput(file)
+	log.SetOutput(file) */
 	log.SetPrefix("LOG: ")
 	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
 	log.Println("Server started")
