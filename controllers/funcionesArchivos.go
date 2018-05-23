@@ -4,7 +4,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -80,7 +79,7 @@ func readFromFile(file string) ([]byte, error) {
 
 // Cifrar archivo ...
 func cifrarArchivo(file, key, email string) {
-	content, err := readFromFile(file)
+	content, err := readFromFile("files/" + file)
 	checkErr(err)
 
 	encrypted := encrypt(string(content), key)
@@ -100,6 +99,7 @@ func descifrarArchivo(file, key, email string) {
 func GuardarArchivo(file, email string) {
 	cifrarArchivo(file, KEY, email)
 	insertarArchivo(file, email)
+	deleteFile("files/" + file)
 }
 
 // EliminarArchivo ...
@@ -114,20 +114,4 @@ func DescargarArchivo(file, email string) {
 	//downloadFile(file, "files/"+email)
 
 	deleteFile("files/" + email + "/" + file)
-}
-
-// ComprobarCredenciales ...
-func ComprobarCredenciales(email, pass string) bool {
-	hash := datosUsuario(email)
-	if hash != "" {
-		if CheckPasswordHash(pass, hash) {
-			return true
-		} else {
-			/* http.Redirect */
-		}
-	} else {
-		fmt.Println("El usuario no existe !!!")
-	}
-
-	return false
 }

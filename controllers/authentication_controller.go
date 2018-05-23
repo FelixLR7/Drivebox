@@ -96,7 +96,7 @@ func UploadHandler(response http.ResponseWriter, request *http.Request) {
 	}
 
 	email, _ := request.Cookie("session")
-	GuardarArchivo(projectPath+"/files/"+header.Filename, email.Value)
+	GuardarArchivo(header.Filename, email.Value)
 
 	http.Redirect(response, request, "/", http.StatusFound)
 }
