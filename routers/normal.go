@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// SetNormalRoutes ...
 func SetNormalRoutes(mux *http.ServeMux) *http.ServeMux {
 	mux.Handle("/static/css/", http.StripPrefix("/static/css", http.FileServer(http.Dir("/home/felix/go/src/drivebox/static/css/"))))
 	/* http.HandleFunc("/register", controllers.RegisterPageHandler) */
