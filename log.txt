@@ -1,3 +1,7 @@
 LOG: 2018/05/23 14:16:39 /home/felix/go/src/drivebox/main.go:20: Server started
 LOG: 2018/05/23 14:18:39 /home/felix/go/src/drivebox/main.go:20: Server started
 LOG: 2018/05/23 14:19:12 /home/felix/go/src/drivebox/main.go:20: Server started
+LOG: 2018/05/23 14:23:18 /home/felix/go/src/drivebox/main.go:20: Server started
+LOG: 2018/05/23 15:24:15 /home/felix/go/src/drivebox/main.go:20: Server started
+LOG: 2018/05/23 15:24:19 /usr/local/go/src/net/http/h2_bundle.go:4296: http2: server: error reading preface from client [::1]:32872: read tcp [::1]:8080->[::1]:32872: read: connection reset by peer
+LOG: 2018/05/23 15:25:05 /home/felix/go/src/drivebox/main.go:20: Server started

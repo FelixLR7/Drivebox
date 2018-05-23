@@ -7,7 +7,7 @@ import (
 
 // SetAuthenticationRoutes ...
 func SetAuthenticationRoutes(mux *http.ServeMux) *http.ServeMux {
-	mux.HandleFunc("/login", controllers.Authentication(controllers.LoginHandler))
+	mux.HandleFunc("/login", controllers.LoginHandler)
 	mux.HandleFunc("/logout", controllers.Authentication(controllers.LogoutHandler))
 	mux.HandleFunc("/upload", controllers.Authentication(func(response http.ResponseWriter, request *http.Request) {
 		if request.Method == "GET" {
