@@ -4,7 +4,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -114,20 +113,4 @@ func DescargarArchivo(file, email string) {
 	//downloadFile(file, "files/"+email)
 
 	deleteFile("files/" + email + "/" + file)
-}
-
-// ComprobarCredenciales
-func ComprobarCredenciales(email, pass string) bool {
-	hash := datosUsuario(email)
-	if hash != "" {
-		if CheckPasswordHash(pass, hash) {
-			return true
-		} else {
-			fmt.Println("Contraseña incorrecta !!!")
-			return false
-		}
-	} else {
-		fmt.Println("El usuario no existe !!!")
-		return false
-	}
 }

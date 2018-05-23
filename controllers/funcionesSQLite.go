@@ -124,3 +124,19 @@ func ListarArchivos(useremail string) []string {
 
 	return archivos
 }
+
+// ComprobarCredenciales
+func ComprobarCredenciales(email, pass string) bool {
+	hash := datosUsuario(email)
+	if hash != "" {
+		if CheckPasswordHash(pass, hash) {
+			return true
+		} else {
+			fmt.Println("Contraseña incorrecta !!!")
+			return false
+		}
+	} else {
+		fmt.Println("El usuario no existe !!!")
+		return false
+	}
+}
