@@ -4,6 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -20,6 +21,11 @@ func deleteFile(path string) {
 		panic(err)
 	}
 }
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
 
 // Decrypt
 func decrypt(cipherstring string, keystring string) string {
@@ -27,9 +33,7 @@ func decrypt(cipherstring string, keystring string) string {
 	key := []byte(keystring)
 
 	block, err := aes.NewCipher(key)
-	if err != nil {
-		panic(err)
-	}
+	checkErr(err)
 
 	if len(ciphertext) < aes.BlockSize {
 		panic("Text is too short")
@@ -49,9 +53,7 @@ func encrypt(plainstring, keystring string) string {
 	key := []byte(keystring)
 
 	block, err := aes.NewCipher(key)
-	if err != nil {
-		panic(err)
-	}
+	checkErr(err)
 
 	ciphertext := make([]byte, aes.BlockSize+len(plaintext))
 	iv := ciphertext[:aes.BlockSize]
@@ -79,9 +81,8 @@ func readFromFile(file string) ([]byte, error) {
 // Cifrar archivo ...
 func cifrarArchivo(file, key, email string) {
 	content, err := readFromFile(file)
-	if err != nil {
-		panic(err)
-	}
+	checkErr(err)
+
 	encrypted := encrypt(string(content), key)
 	writeToFile(encrypted, "files/"+email+"/"+file+".enc")
 }
@@ -89,9 +90,8 @@ func cifrarArchivo(file, key, email string) {
 // Descifrar archivo ...
 func descifrarArchivo(file, key, email string) {
 	content, err := readFromFile("files/" + email + "/" + file + ".enc")
-	if err != nil {
-		panic(err)
-	}
+	checkErr(err)
+
 	decrypted := decrypt(string(content), key)
 	writeToFile(decrypted, "files/"+email+"/"+file)
 }
@@ -99,13 +99,35 @@ func descifrarArchivo(file, key, email string) {
 // GuardarArchivo  ...
 func GuardarArchivo(file, email string) {
 	cifrarArchivo(file, KEY, email)
+	insertarArchivo(file, email)
+}
+
+// EliminarArchivo ...
+func EliminarArchivo(file, email string) {
+	eliminarArchivo(file, email)
+	deleteFile("files/" + email + "/" + file + ".enc")
 }
 
 // DescargarArchivo ...
 func DescargarArchivo(file, email string) {
 	descifrarArchivo(file, KEY, email)
-
-	//hacer que descargue el archivo !!!!!
+	//downloadFile(file, "files/"+email)
 
 	deleteFile("files/" + email + "/" + file)
+}
+
+// ComprobarCredenciales
+func ComprobarCredenciales(email, pass string) bool {
+	hash := datosUsuario(email)
+	if hash != "" {
+		if CheckPasswordHash(pass, hash) {
+			return true
+		} else {
+			fmt.Println("Contraseña incorrecta !!!")
+			return false
+		}
+	} else {
+		fmt.Println("El usuario no existe !!!")
+		return false
+	}
 }

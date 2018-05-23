@@ -14,12 +14,6 @@ const (
 	DB_HOST = "database/BBDD.db"
 )
 
-func checkErr(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 // createDirIfNotExist ...
 func createDirIfNotExist(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
@@ -40,6 +34,17 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func datosUsuario(email string) string {
+	var password string
+	database, _ := sql.Open(DB_NAME, DB_HOST)
+	rows, _ := database.Query("SELECT password FROM users WHERE email = '" + email + "';")
+
+	rows.Next()
+	rows.Scan(&password)
+
+	return password
 }
 
 // Insertar Usuario ...
@@ -80,7 +85,7 @@ func ListarUsuarios() {
 }
 
 // Insertar Archivos ...
-func InsertarArchivo(nombre, email string) {
+func insertarArchivo(nombre, email string) {
 	url := "files/" + email + "/" + nombre
 
 	db, _ := sql.Open(DB_NAME, DB_HOST)
@@ -92,7 +97,7 @@ func InsertarArchivo(nombre, email string) {
 }
 
 // Eliminar Archivo ...
-func EliminarArchivo(archivo, email string) {
+func eliminarArchivo(archivo, email string) {
 	db, _ := sql.Open(DB_NAME, DB_HOST)
 	stmt, err := db.Prepare("DELETE FROM archivos WHERE nombre = ? and emailuser = ?")
 	checkErr(err)
