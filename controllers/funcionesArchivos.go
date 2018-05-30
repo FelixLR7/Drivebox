@@ -9,16 +9,10 @@ import (
 	"os"
 )
 
-const (
-	KEY = "testtesttesttest"
-)
-
 // delete file
 func deleteFile(path string) {
 	var err = os.Remove(path)
-	if err != nil {
-		panic(err)
-	}
+	checkErr(err)
 }
 func checkErr(err error) {
 	if err != nil {
@@ -87,7 +81,8 @@ func cifrarArchivo(file, key, email string) {
 }
 
 // Descifrar archivo ...
-func DescifrarArchivo(file, key, email string) {
+func DescifrarArchivo(file, email string) {
+	key := getKEY(email)
 	content, err := readFromFile("files/" + email + "/" + file + ".enc")
 	checkErr(err)
 
@@ -97,7 +92,8 @@ func DescifrarArchivo(file, key, email string) {
 
 // GuardarArchivo  ...
 func GuardarArchivo(file, email string) {
-	cifrarArchivo(file, KEY, email)
+	key := getKEY(email)
+	cifrarArchivo(file, key, email)
 	insertarArchivo(file, email)
 	deleteFile("files/" + file)
 }

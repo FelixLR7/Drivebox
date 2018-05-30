@@ -134,7 +134,7 @@ func DownloadHandler(response http.ResponseWriter, request *http.Request) {
 	email := GetCookie("session", request)
 	param := request.URL.Query().Get("name")
 
-	DescifrarArchivo(param, KEY, email)
+	DescifrarArchivo(param, email)
 
 	response.Header().Set("Content-Disposition", "attachment; filename=\""+param+"\"")
 	response.Header().Set("Content-Type", request.Header.Get("Content-Type"))

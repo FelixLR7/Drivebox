@@ -3,6 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"fmt"
+	"math/rand"
 	"os"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -14,13 +15,20 @@ const (
 	DB_HOST = "database/BBDD.db"
 )
 
+func generateKEY(n int) string {
+	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
+}
+
 // createDirIfNotExist ...
 func createDirIfNotExist(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		err = os.MkdirAll(dir, 0755)
-		if err != nil {
-			panic(err)
-		}
+		checkErr(err)
 	}
 }
 
@@ -50,11 +58,13 @@ func datosUsuario(email string) string {
 // InsertarUsuario ...
 func InsertarUsuario(email, pass string) {
 	db, _ := sql.Open(DB_NAME, DB_HOST)
-	stmt, err := db.Prepare("INSERT INTO users (email, password) values(?,?)")
+	stmt, err := db.Prepare("INSERT INTO users (email, password, key) values(?,?,?)")
 	checkErr(err)
 
+	key := generateKEY(16)
+
 	hash, _ := HashPassword(pass)
-	stmt.Exec(email, hash)
+	stmt.Exec(email, hash, key)
 	checkErr(err)
 	defer db.Close()
 
@@ -139,4 +149,16 @@ func ComprobarCredenciales(email, pass string) bool {
 		fmt.Println("El usuario no existe !!!")
 		return false
 	}
+}
+
+func getKEY(email string) string {
+	var key string
+
+	database, _ := sql.Open(DB_NAME, DB_HOST)
+	rows, _ := database.Query("SELECT key FROM users WHERE email = '" + email + "';")
+
+	rows.Next()
+	rows.Scan(&key)
+
+	return key
 }
