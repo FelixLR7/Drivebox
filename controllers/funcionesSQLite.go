@@ -11,10 +11,11 @@ import (
 )
 
 const (
-	DB_NAME = "sqlite3"
-	DB_HOST = "database/BBDD.db"
+	DBNAME = "sqlite3"
+	DBHOST = "database/BBDD.db"
 )
 
+// generateKEY
 func generateKEY(n int) string {
 	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	b := make([]rune, n)
@@ -22,6 +23,21 @@ func generateKEY(n int) string {
 		b[i] = letters[rand.Intn(len(letters))]
 	}
 	return string(b)
+}
+
+// getKEY
+func getKEY(email string) string {
+	var key string
+
+	db, _ := sql.Open(DBNAME, DBHOST)
+	rows, err := db.Query("SELECT key FROM users WHERE email = '" + email + "';")
+	checkErr(err)
+
+	rows.Next()
+	rows.Scan(&key)
+	rows.Close()
+
+	return key
 }
 
 // createDirIfNotExist ...
@@ -46,78 +62,75 @@ func CheckPasswordHash(password, hash string) bool {
 
 func datosUsuario(email string) string {
 	var password string
-	db, _ := sql.Open(DB_NAME, DB_HOST)
+	db, _ := sql.Open(DBNAME, DBHOST)
 	rows, _ := db.Query("SELECT password FROM users WHERE email = '" + email + "';")
 
 	rows.Next()
 	rows.Scan(&password)
-	db.Close()
+	rows.Close()
 
 	return password
 }
 
 // InsertarUsuario ...
 func InsertarUsuario(email, pass string) {
-	db, _ := sql.Open(DB_NAME, DB_HOST)
-	stmt, err := db.Prepare("INSERT INTO users (email, password, key) values(?,?,?)")
+	key := generateKEY(16)
+	hash, _ := HashPassword(pass)
+
+	db, _ := sql.Open(DBNAME, DBHOST)
+	stmt, err := db.Prepare("INSERT INTO users (email, password, key) values(?,?,?);")
 	checkErr(err)
 
-	key := generateKEY(16)
-
-	hash, _ := HashPassword(pass)
 	stmt.Exec(email, hash, key)
 	checkErr(err)
-	defer db.Close()
 
 	createDirIfNotExist("files/" + email)
 }
 
 // EliminarUsuario ...
 func EliminarUsuario(email string) {
-	db, _ := sql.Open(DB_NAME, DB_HOST)
-	stmt, err := db.Prepare("DELETE FROM users WHERE email = ?")
+	db, _ := sql.Open(DBNAME, DBHOST)
+	stmt, err := db.Prepare("DELETE FROM users WHERE email = ?;")
 	checkErr(err)
 
 	stmt.Exec(email)
 	checkErr(err)
-	db.Close()
 }
 
 // ListarUsuarios ...
 func ListarUsuarios() {
-	db, _ := sql.Open(DB_NAME, DB_HOST)
+	db, _ := sql.Open(DBNAME, DBHOST)
 
-	rows, _ := db.Query("SELECT * FROM users")
+	rows, _ := db.Query("SELECT email, password FROM users;")
 	var email string
 	var password string
 	for rows.Next() {
 		rows.Scan(&email, &password)
 		fmt.Println(email + " - " + password)
 	}
-	defer db.Close()
+	rows.Close()
 }
 
 // InsertarArchivos ...
 func insertarArchivo(nombre, email string) {
 	url := "files/" + email + "/" + nombre
 
-	db, _ := sql.Open(DB_NAME, DB_HOST)
-	stmt, err := db.Prepare("INSERT INTO archivos (nombre, url, emailuser) VALUES(?,?,?)")
+	db, _ := sql.Open(DBNAME, DBHOST)
+	stmt, err := db.Prepare("INSERT INTO archivos (nombre, url, emailuser) VALUES(?,?,?);")
 	checkErr(err)
 
 	stmt.Exec(nombre, url, email)
-	defer db.Close()
+	checkErr(err)
 }
 
 // EliminarArchivo ...
 func eliminarArchivo(archivo, email string) {
-	db, _ := sql.Open(DB_NAME, DB_HOST)
-	stmt, err := db.Prepare("DELETE FROM archivos WHERE nombre = ? and emailuser = ?")
+	db, _ := sql.Open(DBNAME, DBHOST)
+	stmt, err := db.Prepare("DELETE FROM archivos WHERE nombre = ? and emailuser = ?;")
 	checkErr(err)
 
 	stmt.Exec(archivo, email)
 	checkErr(err)
-	db.Close()
 }
 
 // ListarArchivos ...
@@ -127,7 +140,7 @@ func ListarArchivos(useremail string) []string {
 	var url string
 	var email string
 
-	db, _ := sql.Open(DB_NAME, DB_HOST)
+	db, _ := sql.Open(DBNAME, DBHOST)
 	rows, _ := db.Query("SELECT * FROM archivos WHERE emailuser = '" + useremail + "';")
 
 	for rows.Next() {
@@ -135,7 +148,7 @@ func ListarArchivos(useremail string) []string {
 		//fmt.Println(nombre + " - " + url + " - " + email)
 		archivos = append(archivos, nombre)
 	}
-	db.Close()
+	rows.Close()
 
 	return archivos
 }
@@ -154,19 +167,4 @@ func ComprobarCredenciales(email, pass string) bool {
 		fmt.Println("El usuario no existe !!!")
 		return false
 	}
-}
-
-// getKEY
-func getKEY(email string) string {
-	var key string
-
-	db, _ := sql.Open(DB_NAME, DB_HOST)
-	rows, err := db.Query("SELECT key FROM users WHERE email = '" + email + "'")
-	checkErr(err)
-
-	rows.Next()
-	rows.Scan(&key)
-	db.Close()
-
-	return key
 }

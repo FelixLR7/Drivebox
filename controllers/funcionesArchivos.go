@@ -14,6 +14,8 @@ func deleteFile(path string) {
 	var err = os.Remove(path)
 	checkErr(err)
 }
+
+// checkErr
 func checkErr(err error) {
 	if err != nil {
 		panic(err)
@@ -72,47 +74,54 @@ func readFromFile(file string) ([]byte, error) {
 }
 
 // Cifrar archivo ...
-func cifrarArchivo(file, key, email string) {
-	var ruta string
+func CifrarArchivo(file, key, email string) {
+	var readRuta string
+	var writeRuta string
+
 	if file == "BBDD.db" { //para cifrar la base de datos
-		ruta = "database/" + file
+		readRuta = "database/" + file
+		writeRuta = readRuta
 		key = "testtesttesttest"
 	} else {
-		ruta = "files/" + email + "/" + file
+		writeRuta = "files/" + email + "/" + file
+		readRuta = "files/" + file
 	}
-	content, err := readFromFile("files/" + file)
+	content, err := readFromFile(readRuta)
 	checkErr(err)
 
 	encrypted := encrypt(string(content), key)
-	writeToFile(encrypted, ruta+".enc")
+	writeToFile(encrypted, writeRuta+".enc")
 
 }
 
 // Descifrar archivo ...
 func DescifrarArchivo(file, email string) {
 	var key string
-	var ruta string
+	var readRuta string
+	var writeRuta string
 
 	if file == "BBDD.db" {
 		key = "testtesttesttest"
-		ruta = "database/" + file
+		readRuta = "database/" + file
+		writeRuta = readRuta
 	} else {
 		key = getKEY(email)
-		ruta = "files/" + email + "/" + file
+		readRuta = "files/" + email + "/" + file
+		writeRuta = "files/" + file
 	}
 
-	content, err := readFromFile(ruta + ".enc")
+	content, err := readFromFile(readRuta + ".enc")
 	checkErr(err)
 
 	decrypted := decrypt(string(content), key)
-	writeToFile(decrypted, "files/"+file)
+	writeToFile(decrypted, writeRuta)
 }
 
 // GuardarArchivo  ...
 func GuardarArchivo(file, email string) {
 	insertarArchivo(file, email)
 	key := getKEY(email)
-	cifrarArchivo(file, key, email)
+	CifrarArchivo(file, key, email)
 	deleteFile("files/" + file)
 
 }
@@ -121,4 +130,11 @@ func GuardarArchivo(file, email string) {
 func EliminarArchivo(file, email string) {
 	eliminarArchivo(file, email)
 	deleteFile("files/" + email + "/" + file + ".enc")
+}
+
+//GestionDB
+func GestionDB() {
+	deleteFile("database/BBDD.db.enc") //borramos la bd cifrada
+	CifrarArchivo("BBDD.db", "", "")   //ciframos la nueva bd
+	deleteFile("database/BBDD.db")     //borramos la bd sin cifrar
 }

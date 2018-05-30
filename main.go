@@ -1,6 +1,7 @@
 package main
 
 import (
+	"drivebox/controllers"
 	"drivebox/routers"
 	"fmt"
 	"log"
@@ -21,6 +22,12 @@ func init() {
 }
 
 func main() {
+	controllers.DescifrarArchivo("BBDD.db", "") //descifra la base de datos
+	err := os.Chmod("database/BBDD.db", 0777)   //le damos permisos a la bd
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	stopChan := make(chan os.Signal)
 	signal.Notify(stopChan, os.Interrupt)
 
@@ -33,8 +40,10 @@ func main() {
 		}
 	}()
 
-	<-stopChan // espera señal SIGINT
+	<-stopChan              // espera señal SIGINT
+	controllers.GestionDB() //al cerrarse el servidor solo quedará la bd cifrada
 
 	/////////////////////////// PRUEBAS //////////////////////////////////
-
+	//controllers.InsertarUsuario("fff", "f")
+	//controllers.ListarUsuarios()
 }
