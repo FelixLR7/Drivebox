@@ -46,11 +46,12 @@ func CheckPasswordHash(password, hash string) bool {
 
 func datosUsuario(email string) string {
 	var password string
-	database, _ := sql.Open(DB_NAME, DB_HOST)
-	rows, _ := database.Query("SELECT password FROM users WHERE email = '" + email + "';")
+	db, _ := sql.Open(DB_NAME, DB_HOST)
+	rows, _ := db.Query("SELECT password FROM users WHERE email = '" + email + "';")
 
 	rows.Next()
 	rows.Scan(&password)
+	db.Close()
 
 	return password
 }
@@ -79,19 +80,21 @@ func EliminarUsuario(email string) {
 
 	stmt.Exec(email)
 	checkErr(err)
+	db.Close()
 }
 
 // ListarUsuarios ...
 func ListarUsuarios() {
-	database, _ := sql.Open(DB_NAME, DB_HOST)
+	db, _ := sql.Open(DB_NAME, DB_HOST)
 
-	rows, _ := database.Query("SELECT * FROM users")
+	rows, _ := db.Query("SELECT * FROM users")
 	var email string
 	var password string
 	for rows.Next() {
 		rows.Scan(&email, &password)
 		fmt.Println(email + " - " + password)
 	}
+	defer db.Close()
 }
 
 // InsertarArchivos ...
@@ -99,11 +102,11 @@ func insertarArchivo(nombre, email string) {
 	url := "files/" + email + "/" + nombre
 
 	db, _ := sql.Open(DB_NAME, DB_HOST)
-	stmt, err := db.Prepare("INSERT INTO archivos (nombre, url, emailuser) values(?,?,?)")
+	stmt, err := db.Prepare("INSERT INTO archivos (nombre, url, emailuser) VALUES(?,?,?)")
 	checkErr(err)
 
 	stmt.Exec(nombre, url, email)
-	checkErr(err)
+	defer db.Close()
 }
 
 // EliminarArchivo ...
@@ -114,6 +117,7 @@ func eliminarArchivo(archivo, email string) {
 
 	stmt.Exec(archivo, email)
 	checkErr(err)
+	db.Close()
 }
 
 // ListarArchivos ...
@@ -123,14 +127,15 @@ func ListarArchivos(useremail string) []string {
 	var url string
 	var email string
 
-	database, _ := sql.Open(DB_NAME, DB_HOST)
-	rows, _ := database.Query("SELECT * FROM archivos WHERE emailuser = '" + useremail + "';")
+	db, _ := sql.Open(DB_NAME, DB_HOST)
+	rows, _ := db.Query("SELECT * FROM archivos WHERE emailuser = '" + useremail + "';")
 
 	for rows.Next() {
 		rows.Scan(&nombre, &url, &email)
 		//fmt.Println(nombre + " - " + url + " - " + email)
 		archivos = append(archivos, nombre)
 	}
+	db.Close()
 
 	return archivos
 }
@@ -151,14 +156,17 @@ func ComprobarCredenciales(email, pass string) bool {
 	}
 }
 
+// getKEY
 func getKEY(email string) string {
 	var key string
 
-	database, _ := sql.Open(DB_NAME, DB_HOST)
-	rows, _ := database.Query("SELECT key FROM users WHERE email = '" + email + "';")
+	db, _ := sql.Open(DB_NAME, DB_HOST)
+	rows, err := db.Query("SELECT key FROM users WHERE email = '" + email + "'")
+	checkErr(err)
 
 	rows.Next()
 	rows.Scan(&key)
+	db.Close()
 
 	return key
 }

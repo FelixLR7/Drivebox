@@ -92,9 +92,9 @@ func DescifrarArchivo(file, email string) {
 
 // GuardarArchivo  ...
 func GuardarArchivo(file, email string) {
+	insertarArchivo(file, email)
 	key := getKEY(email)
 	cifrarArchivo(file, key, email)
-	insertarArchivo(file, email)
 	deleteFile("files/" + file)
 }
 

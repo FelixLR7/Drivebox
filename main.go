@@ -36,7 +36,6 @@ func main() {
 	<-stopChan // espera señal SIGINT
 
 	/////////////////////////// PRUEBAS //////////////////////////////////
-	///key := controllers.GetKEY("b@b.b")
-	//fmt.Println("key: " + key)
+	//controllers.GuardarArchivo("sds-practica-1718.pdf", "a@a.a")
 
 }
