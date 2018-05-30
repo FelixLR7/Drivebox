@@ -73,21 +73,39 @@ func readFromFile(file string) ([]byte, error) {
 
 // Cifrar archivo ...
 func cifrarArchivo(file, key, email string) {
+	var ruta string
+	if file == "BBDD.db" { //para cifrar la base de datos
+		ruta = "database/" + file
+		key = "testtesttesttest"
+	} else {
+		ruta = "files/" + email + "/" + file
+	}
 	content, err := readFromFile("files/" + file)
 	checkErr(err)
 
 	encrypted := encrypt(string(content), key)
-	writeToFile(encrypted, "files/"+email+"/"+file+".enc")
+	writeToFile(encrypted, ruta+".enc")
+
 }
 
 // Descifrar archivo ...
 func DescifrarArchivo(file, email string) {
-	key := getKEY(email)
-	content, err := readFromFile("files/" + email + "/" + file + ".enc")
+	var key string
+	var ruta string
+
+	if file == "BBDD.db" {
+		key = "testtesttesttest"
+		ruta = "database/" + file
+	} else {
+		key = getKEY(email)
+		ruta = "files/" + email + "/" + file
+	}
+
+	content, err := readFromFile(ruta + ".enc")
 	checkErr(err)
 
 	decrypted := decrypt(string(content), key)
-	writeToFile(decrypted, "files/"+email+"/"+file)
+	writeToFile(decrypted, "files/"+file)
 }
 
 // GuardarArchivo  ...
@@ -96,6 +114,7 @@ func GuardarArchivo(file, email string) {
 	key := getKEY(email)
 	cifrarArchivo(file, key, email)
 	deleteFile("files/" + file)
+
 }
 
 // EliminarArchivo ...

@@ -36,6 +36,5 @@ func main() {
 	<-stopChan // espera señal SIGINT
 
 	/////////////////////////// PRUEBAS //////////////////////////////////
-	//controllers.GuardarArchivo("sds-practica-1718.pdf", "a@a.a")
 
 }

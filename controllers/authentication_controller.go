@@ -140,8 +140,8 @@ func DownloadHandler(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Content-Disposition", "attachment; filename=\""+param+"\"")
 	response.Header().Set("Content-Type", request.Header.Get("Content-Type"))
 
-	data, _ := ioutil.ReadFile("./files/" + email + "/" + param)
+	data, _ := ioutil.ReadFile("./files/" + param)
 	http.ServeContent(response, request, param, time.Now(), bytes.NewReader(data))
 
-	deleteFile("files/" + email + "/" + param)
+	deleteFile("files/" + param)
 }
