@@ -94,6 +94,7 @@ func UploadHandler(response http.ResponseWriter, request *http.Request) {
 	}
 
 	email, _ := request.Cookie("session")
+
 	GuardarArchivo(header.Filename, email.Value)
 
 	http.Redirect(response, request, "/", http.StatusFound)
@@ -134,13 +135,13 @@ func DownloadHandler(response http.ResponseWriter, request *http.Request) {
 	email := GetCookie("session", request)
 	param := request.URL.Query().Get("name")
 
-	DescifrarArchivo(param, KEY, email)
+	DescifrarArchivo(param, email)
 
 	response.Header().Set("Content-Disposition", "attachment; filename=\""+param+"\"")
 	response.Header().Set("Content-Type", request.Header.Get("Content-Type"))
 
-	data, _ := ioutil.ReadFile("./files/" + email + "/" + param)
+	data, _ := ioutil.ReadFile("./files/" + param)
 	http.ServeContent(response, request, param, time.Now(), bytes.NewReader(data))
 
-	deleteFile("files/" + email + "/" + param)
+	deleteFile("files/" + param)
 }
