@@ -20,13 +20,7 @@
                   <a class="nav-link" href="/upload">Subir archivo</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/logs">Logs</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/mi-cuenta">Mi cuenta</a>
-                </li>
-                <li class="nav-item">
-                  <a class="btn btn-primary" href="/logout">Salir</a>
+                  <a class="btn btn-primary btn-logout" href="/logout">Salir</a>
                 </li>
               </ul>
             </nav>
@@ -37,7 +31,7 @@
                   Nombre
                 </div>
                 <div class="col-lg-6">
-                  Descargar
+                  Acciones
                 </div>
               </div>
               {{range .}}
@@ -47,6 +41,7 @@
                 </div>
                 <div class="col-lg-6">
                   <a href="/download?name={{$q}}" class="btn btn-primary btn-download">&#9889;</a>
+                  <a href="/delete?name={{$q}}" class="btn btn-danger btn-download">&#215;</a>
                 </div>
               </div>
               {{end}}              

@@ -145,3 +145,10 @@ func DownloadHandler(response http.ResponseWriter, request *http.Request) {
 
 	deleteFile("files/" + param)
 }
+
+func DeleteHandler(response http.ResponseWriter, request *http.Request) {
+	email := GetCookie("session", request)
+	param := request.URL.Query().Get("name")
+
+	EliminarArchivo(param, email)
+}

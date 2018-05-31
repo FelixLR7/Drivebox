@@ -81,3 +81,7 @@ h1 {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
+
+.btn-logout {
+  margin-left: 1rem;
+}
