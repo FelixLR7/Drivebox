@@ -34,8 +34,8 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 		doubleAuth[email] = token
 
 		body := "<a href=\"https://localhost:8080/validation?token=" + string(token) + "\">Click aquí</a>"
-		SendMail(email, email, "Drivebox", "drivebox@admin.com", "Doble autenticación", body)
-		http.Redirect(response, request, "/index", 302)
+		SendMail(email, email, "Doble autenticación", body)
+		OwnErrorsHandler(response, request, "email")
 	}
 
 	OwnErrorsHandler(response, request, "user")
@@ -184,11 +184,11 @@ func ValidationHandler(response http.ResponseWriter, request *http.Request) {
 }
 
 // SendMail ...
-func SendMail(toNameP, toEmailP, fromNameP, fromEmailP, subjectP, bodyP string) {
+func SendMail(toNameP, toEmailP, subjectP, bodyP string) {
 	fromName := "Drivebox"
 	fromEmail := "admin@drivebox.com"
 	toNames := []string{toNameP}
-	toEmails := []string{"felix.lorente.7@gmail.com"}
+	toEmails := []string{toEmailP}
 	subject := subjectP
 	body := bodyP
 	// Build RFC-2822 email
