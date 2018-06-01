@@ -18,6 +18,7 @@ func SetAuthenticationRoutes(mux *http.ServeMux) *http.ServeMux {
 	}))
 	mux.HandleFunc("/download", controllers.Authentication(controllers.DownloadHandler))
 	mux.HandleFunc("/delete", controllers.Authentication(controllers.DeleteHandler))
+	mux.HandleFunc("/validation", controllers.ValidationHandler)
 	mux.HandleFunc("/index", controllers.Authentication(controllers.Homepage))
 
 	return mux

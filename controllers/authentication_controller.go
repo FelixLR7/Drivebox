@@ -8,9 +8,14 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/mail"
+	"net/smtp"
 	"os"
+	"strings"
 	"time"
 )
+
+var doubleAuth = make(map[string]string)
 
 func init() {
 	log.SetPrefix("LOG AUTHENTICATION CONTROLLER: ")
@@ -21,19 +26,25 @@ func init() {
 func LoginHandler(response http.ResponseWriter, request *http.Request) {
 	email := request.FormValue("email")
 	pass := request.FormValue("password")
-	redirectTarget := "/"
 
 	if ComprobarCredenciales(email, pass) {
 		SetNewCookie("session", email, response)
-		redirectTarget = "/index"
+
+		token := generateKEY(32)
+		doubleAuth[email] = token
+
+		body := "<a href=\"https://localhost:8080/validation?token=" + string(token) + "\">Click aquí</a>"
+		SendMail(email, email, "Drivebox", "drivebox@admin.com", "Doble autenticación", body)
+		http.Redirect(response, request, "/index", 302)
 	}
 
-	http.Redirect(response, request, redirectTarget, 302)
+	OwnErrorsHandler(response, request, "user")
 }
 
 // LogoutHandler ...
 func LogoutHandler(response http.ResponseWriter, request *http.Request) {
 	SetNewCookie("session", "", response)
+	SetNewCookie("token", "", response)
 	http.Redirect(response, request, "/", http.StatusFound)
 }
 
@@ -50,7 +61,10 @@ func Authentication(f http.HandlerFunc) http.HandlerFunc {
 
 // CheckAuth ...
 func CheckAuth(request *http.Request) bool {
-	if cookie, err := request.Cookie("session"); err == nil && cookie.Value != "" {
+	email, err1 := GetCookie("session", request)
+	token, err2 := GetCookie("token", request)
+
+	if err1 == nil && err2 == nil && email != "" && token != "" && doubleAuth[email] == token {
 		return true
 	}
 	return false
@@ -122,17 +136,18 @@ func SetNewCookie(cookieName, cookieValue string, response http.ResponseWriter) 
 }
 
 // GetCookie ...
-func GetCookie(cookieName string, request *http.Request) string {
+func GetCookie(cookieName string, request *http.Request) (string, error) {
 	cookie, err := request.Cookie(cookieName)
 	if err != nil {
 		log.Println(err)
+		return "", err
 	}
-	return cookie.Value
+	return cookie.Value, nil
 }
 
 // DownloadHandler ...
 func DownloadHandler(response http.ResponseWriter, request *http.Request) {
-	email := GetCookie("session", request)
+	email, _ := GetCookie("session", request)
 	param := request.URL.Query().Get("name")
 
 	DescifrarArchivo(param, email)
@@ -146,9 +161,88 @@ func DownloadHandler(response http.ResponseWriter, request *http.Request) {
 	deleteFile("files/" + param)
 }
 
+// DeleteHandler ...
 func DeleteHandler(response http.ResponseWriter, request *http.Request) {
-	email := GetCookie("session", request)
-	param := request.URL.Query().Get("name")
+	email, _ := GetCookie("session", request)
+	name := request.URL.Query().Get("name")
 
-	EliminarArchivo(param, email)
+	EliminarArchivo(name, email)
+}
+
+// ValidationHandler ...
+func ValidationHandler(response http.ResponseWriter, request *http.Request) {
+	email, errEmail := GetCookie("session", request)
+	token := request.URL.Query().Get("token")
+
+	if errEmail == nil && doubleAuth[email] == token {
+		SetNewCookie("token", token, response)
+
+		http.Redirect(response, request, "/index", http.StatusFound)
+	} else {
+		ErrorHandler(response, request, http.StatusUnauthorized)
+	}
+}
+
+// SendMail ...
+func SendMail(toNameP, toEmailP, fromNameP, fromEmailP, subjectP, bodyP string) {
+	fromName := "Drivebox"
+	fromEmail := "admin@drivebox.com"
+	toNames := []string{toNameP}
+	toEmails := []string{"felix.lorente.7@gmail.com"}
+	subject := subjectP
+	body := bodyP
+	// Build RFC-2822 email
+	toAddresses := []string{}
+	for i := range toEmails {
+		to := mail.Address{toNames[i], toEmails[i]}
+		toAddresses = append(toAddresses, to.String())
+	}
+	toHeader := strings.Join(toAddresses, ", ")
+	from := mail.Address{fromName, fromEmail}
+	fromHeader := from.String()
+	subjectHeader := subject
+	header := make(map[string]string)
+	header["To"] = toHeader
+	header["From"] = fromHeader
+	header["Subject"] = subjectHeader
+	header["Content-Type"] = `text/html; charset="UTF-8"`
+	msg := ""
+	for k, v := range header {
+		msg += fmt.Sprintf("%s: %s\r\n", k, v)
+	}
+	msg += "\r\n" + body
+	bMsg := []byte(msg)
+	// Send using local postfix service
+	c, err := smtp.Dial("localhost:25")
+	if err != nil {
+		return
+	}
+	defer c.Close()
+	if err = c.Mail(fromHeader); err != nil {
+		return
+	}
+	for _, addr := range toEmails {
+		if err = c.Rcpt(addr); err != nil {
+			return
+		}
+	}
+	w, err := c.Data()
+	if err != nil {
+		return
+	}
+	_, err = w.Write(bMsg)
+	if err != nil {
+		return
+	}
+	err = w.Close()
+	if err != nil {
+		return
+	}
+	err = c.Quit()
+	// Or alternatively, send with remote service like Amazon SES
+	// err = smtp.SendMail(addr, auth, fromEmail, toEmails, bMsg)
+	// Handle response from local postfix or remote service
+	if err != nil {
+		return
+	}
 }

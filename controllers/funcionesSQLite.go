@@ -159,12 +159,7 @@ func ComprobarCredenciales(email, pass string) bool {
 	if hash != "" {
 		if CheckPasswordHash(pass, hash) {
 			return true
-		} else {
-			fmt.Println("Contraseña incorrecta !!!")
-			return false
 		}
-	} else {
-		fmt.Println("El usuario no existe !!!")
-		return false
 	}
+	return false
 }
