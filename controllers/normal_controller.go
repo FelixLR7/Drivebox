@@ -47,7 +47,7 @@ func RegisterPageHandler(response http.ResponseWriter, request *http.Request) {
 func RegisterHandler(response http.ResponseWriter, request *http.Request) {
 	InsertarUsuario(request.FormValue("email"), request.FormValue("password"))
 	SetNewCookie("session", request.FormValue("email"), response)
-	http.Redirect(response, request, "/index", http.StatusFound)
+	http.Redirect(response, request, "/", http.StatusFound)
 }
 
 func OwnErrorsHandler(response http.ResponseWriter, request *http.Request, name string) {
