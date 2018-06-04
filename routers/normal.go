@@ -7,7 +7,6 @@ import (
 
 // SetNormalRoutes ...
 func SetNormalRoutes(mux *http.ServeMux) *http.ServeMux {
-	mux.Handle("/static/css/", http.StripPrefix("/static/css", http.FileServer(http.Dir("/home/felix/go/src/drivebox/static/css/"))))
 	mux.HandleFunc("/register", func(response http.ResponseWriter, request *http.Request) {
 		if request.Method == "GET" {
 			controllers.RegisterPageHandler(response, request)

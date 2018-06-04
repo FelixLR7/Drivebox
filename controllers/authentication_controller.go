@@ -139,7 +139,6 @@ func SetNewCookie(cookieName, cookieValue string, response http.ResponseWriter) 
 func GetCookie(cookieName string, request *http.Request) (string, error) {
 	cookie, err := request.Cookie(cookieName)
 	if err != nil {
-		log.Println(err)
 		return "", err
 	}
 	return cookie.Value, nil
@@ -167,6 +166,7 @@ func DeleteHandler(response http.ResponseWriter, request *http.Request) {
 	name := request.URL.Query().Get("name")
 
 	EliminarArchivo(name, email)
+	http.Redirect(response, request, "/", http.StatusFound)
 }
 
 // ValidationHandler ...
