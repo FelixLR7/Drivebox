@@ -50,6 +50,6 @@ func RegisterHandler(response http.ResponseWriter, request *http.Request) {
 	http.Redirect(response, request, "/", http.StatusFound)
 }
 
-func OwnErrorsHandler(response http.ResponseWriter, request *http.Request, name string) {
+func StaticFiles(response http.ResponseWriter, request *http.Request, name string) {
 	http.ServeFile(response, request, staticFilesPath+"/"+name+".html")
 }

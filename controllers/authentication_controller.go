@@ -6,7 +6,6 @@ import (
 	"html/template"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/mail"
 	"net/smtp"
@@ -16,11 +15,6 @@ import (
 )
 
 var doubleAuth = make(map[string]string)
-
-func init() {
-	log.SetPrefix("LOG AUTHENTICATION CONTROLLER: ")
-	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
-}
 
 // LoginHandler ...
 func LoginHandler(response http.ResponseWriter, request *http.Request) {
@@ -35,16 +29,20 @@ func LoginHandler(response http.ResponseWriter, request *http.Request) {
 
 		body := "<a href=\"https://localhost:8080/validation?token=" + string(token) + "\">Click aquí</a>"
 		SendMail(email, email, "Doble autenticación", body)
-		OwnErrorsHandler(response, request, "email")
+		StaticFiles(response, request, "email")
 	}
 
-	OwnErrorsHandler(response, request, "user")
+	StaticFiles(response, request, "user")
 }
 
 // LogoutHandler ...
 func LogoutHandler(response http.ResponseWriter, request *http.Request) {
+	email, _ := GetCookie("email", request)
+
+	delete(doubleAuth, email)
 	SetNewCookie("session", "", response)
 	SetNewCookie("token", "", response)
+
 	http.Redirect(response, request, "/", http.StatusFound)
 }
 
@@ -111,7 +109,7 @@ func UploadHandler(response http.ResponseWriter, request *http.Request) {
 
 	GuardarArchivo(header.Filename, email.Value)
 
-	http.Redirect(response, request, "/", http.StatusFound)
+	StaticFiles(response, request, "success")
 }
 
 // SetNewCookie ...
@@ -166,7 +164,7 @@ func DeleteHandler(response http.ResponseWriter, request *http.Request) {
 	name := request.URL.Query().Get("name")
 
 	EliminarArchivo(name, email)
-	http.Redirect(response, request, "/", http.StatusFound)
+	StaticFiles(response, request, "success")
 }
 
 // ValidationHandler ...
